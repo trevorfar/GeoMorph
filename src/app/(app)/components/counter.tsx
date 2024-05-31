@@ -11,11 +11,11 @@ const Counter = () => {
   return (
     <div>
       <div>
-        <button onClick={() => dispatch(decrement())}>-</button>
+        <button onClick={() => dispatch(decrement(1))}>-</button>
         <span>{count}</span>
-        <button onClick={() => dispatch(increment())}>+</button>
+        <button onClick={() => dispatch(increment(1))}>+</button>
       </div>
-      <button onClick={() => dispatch(incrementByAmount(2))}>Increment by 2</button>
+      <button onClick={() => dispatch(incrementByAmount(4))}>Increment by 2</button>
     </div>
   );
 };
