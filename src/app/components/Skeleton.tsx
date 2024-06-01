@@ -1,14 +1,15 @@
 import { useDispatch, useSelector } from "react-redux"
-import { RootState } from "../GlobalRedux/store";
+import { RootState } from "../GlobalRedux/store"
 
-const Skeleton = () => {
-    const { currentWord } = useSelector((state: RootState) => state.country);
+interface SkeletonProps {
+  index: number
+}
 
-  return (
-    <div className="border-b-2 border-blue-500 w-8">
-      
-    </div>
-  )
+const Skeleton = ({index}: SkeletonProps) => {
+
+  const { currentWord } = useSelector((state: RootState) => state.country)
+ const typedLetter = currentWord[index] || ""
+  return <div className="border-b-2 border-blue-500 w-8 pt-4">{typedLetter||""}</div>
 }
 
 export default Skeleton

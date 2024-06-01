@@ -15,7 +15,7 @@ const GameContainer = () => {
         </div>
         <div className="flex flex-row gap-4 pt-12">
             {Array.from(country).map((_, index) =>(
-            <Skeleton key={index}/>
+            <Skeleton key={index} index={index+1}/>
             ))}
           
         </div>
