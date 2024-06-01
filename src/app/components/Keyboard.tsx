@@ -1,8 +1,8 @@
 "use client"
 import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState } from "../GlobalRedux/store";
-import { type } from "../GlobalRedux/Features/countrySlice";
-import { useEffect } from "react";
+import { AppDispatch, RootState } from "../GlobalRedux/store"
+import { type, del } from "../GlobalRedux/Features/countrySlice"
+import { useEffect } from "react"
 
 const keys = {
   topRow: ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
@@ -11,28 +11,40 @@ const keys = {
 }
 
 const Keyboard = () => {
-const dispatch = useDispatch();
-const { index, country } = useSelector((state: RootState) => state.country);
+  const dispatch = useDispatch()
+  const { index, country } = useSelector((state: RootState) => state.country)
 
   const handleClick = (letter: string) => {
+    if(letter ==="BACKSPACE"){
+        dispatch(del())
+        return
+    }
     dispatch(type(letter))
   }
 
   useEffect(() => {
-    const handleKeyPress = (event: { key: string; }) => {
-      const key = event.key.toUpperCase();
-      if (keys.topRow.includes(key) || keys.middleRow.includes(key) || keys.bottomRow.includes(key)) {
-        handleClick(key);
-      }
-    };
+    const handleKeyPress = (event: KeyboardEvent) => {
+        const key = event.key.toUpperCase()
+      if (
+        keys.topRow.includes(key) ||
+        keys.middleRow.includes(key) ||
+        keys.bottomRow.includes(key) ||
+        key === "BACKSPACE"
+        
+      ) {
+    
+      
+        
+        handleClick(key)
+    }
+    }
 
-    window.addEventListener("keypress", handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress)
 
     return () => {
-      window.removeEventListener("keypress", handleKeyPress);
-    };
-  }, []);
-
+      window.removeEventListener("keydown", handleKeyPress)
+    }
+  }, [])
 
   return (
     <div className="flex flex-wrap justify-center w-full text-center">
@@ -66,12 +78,11 @@ const { index, country } = useSelector((state: RootState) => state.country);
         {keys.bottomRow.map((letter, idx) => (
           <div
             className={`p-1 w-${
-              (idx === 0|| idx === 9) ? "12" : "8"
+              idx === 0 || idx === 9 ? "12" : "8"
             } h-12 rounded-lg hover:bg-gray-300 bg-gray-400 justify-center items-center flex`}
             key={letter}
             onClick={() => handleClick(letter)}
           >
-            
             {letter}
           </div>
         ))}

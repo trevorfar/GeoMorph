@@ -18,7 +18,7 @@ const initialState: CountryState = {
   country: "",
   gameWon: false,
   score: 0,
-  currentWord: [""],
+  currentWord: [],
   index: 0
 }
 
@@ -30,6 +30,8 @@ const countrySlice = createSlice({
       return {
         ...state,
         country: getRandomCountry(),
+        currentWord: [],
+        index: 0,
         gameWon: false, 
         score: state.score,
       }
@@ -38,12 +40,16 @@ const countrySlice = createSlice({
         state.currentWord.push(action.payload),
         state.index +=1
         
-    }
+    },
+    del: (state) => {
+        state.currentWord.pop(),
+        state.index -=1
+    },
 
 
   },
 })
 
-export const { next, type } = countrySlice.actions
+export const { next, type, del } = countrySlice.actions
 
 export default countrySlice.reducer
