@@ -12,9 +12,14 @@ const keys = {
 
 const Keyboard = () => {
 const dispatch = useDispatch();
-// const { currentWord } = useSelector((state: RootState) => state.country);
+const { index, country } = useSelector((state: RootState) => state.country);
 
   const handleClick = (letter: string) => {
+    if(Array.from(country)[index] === " "){
+        console.log("HEY YOU")
+        dispatch(type(" "))
+    }
+    else 
     dispatch(type(letter))
   }
 

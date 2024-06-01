@@ -36,7 +36,7 @@ const countrySlice = createSlice({
     },
     type: (state, action: PayloadAction<string>) => {
         state.currentWord.push(action.payload),
-        state.index +=1 
+        state.index +=1
         
     }
 

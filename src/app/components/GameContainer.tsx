@@ -15,10 +15,11 @@ const GameContainer = () => {
             {country}
             </div>
             <div className="">{index}</div>
+            <div className="">{Array.from(country)[index]}</div>
         </div>
         <div className="flex flex-wrap md:flex-row gap-2 md:gap-4 pt-12">
             {Array.from(country).map((_, index) =>(
-            <Skeleton key={index} index={index+1}/>
+            <Skeleton key={index} index={index}/>
             ))}
           
         </div>
