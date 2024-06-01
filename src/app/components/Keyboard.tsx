@@ -26,15 +26,16 @@ const Keyboard = () => {
     const handleKeyPress = (event: KeyboardEvent) => {
         const key = event.key.toUpperCase()
       if (
-        keys.topRow.includes(key) ||
+       ( keys.topRow.includes(key) ||
         keys.middleRow.includes(key) ||
         keys.bottomRow.includes(key) ||
-        key === "BACKSPACE"
-        
-      ) {
-    
-      
-        
+        (key === "BACKSPACE") 
+      )) {
+
+        if((key === "BACKSPACE" && index === 0) ||
+         (index === Array.from(country).length && key !== "BACKSPACE")){
+            return
+        }
         handleClick(key)
     }
     }
@@ -44,7 +45,7 @@ const Keyboard = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyPress)
     }
-  }, [])
+  }, [handleClick, index, country])
 
   return (
     <div className="flex flex-wrap justify-center w-full text-center">
