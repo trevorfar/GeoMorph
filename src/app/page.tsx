@@ -12,10 +12,10 @@ import Keyboard from "./components/Keyboard"
 const Page = () => {
   const dispatch = useDispatch<AppDispatch>();
   return (
-    <div className="flex justify-center items-center flex-col">
+    <div className="flex justify-center items-center flex-col bg-slate-100 h-screen">
       <GameContainer/>
-      <div className="flex flex-col gap-4">
-      <button onClick={() => dispatch(next())}>Next</button>
+      <div className="flex flex-col gap-4 justify-center items-center pt-2">
+      <button className="bg-green-400 w-16  h-8 rounded-xl" onClick={() => dispatch(next())}>Play</button>
       <Keyboard />
 
    </div>

@@ -6,14 +6,17 @@ import { useDispatch, useSelector } from "react-redux"
 
 
 const GameContainer = () => {
-    const { country, currentWord } = useSelector((state: RootState) => state.country);
+    const { country, currentWord, index } = useSelector((state: RootState) => state.country);
 
     return (
-        <div className="flex flex-col h-64 w-full bg-gray-400 items-center justify-center">
-        <div className=" flex">
+        <div className="flex flex-col h-72 w-full bg-gray-200 items-center justify-center">
+        <div className=" flex flex-row">
+            <div className="">
             {country}
+            </div>
+            <div className="">{index}</div>
         </div>
-        <div className="flex flex-row gap-4 pt-12">
+        <div className="flex flex-wrap md:flex-row gap-2 md:gap-4 pt-12">
             {Array.from(country).map((_, index) =>(
             <Skeleton key={index} index={index+1}/>
             ))}

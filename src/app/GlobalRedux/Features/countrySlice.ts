@@ -6,6 +6,7 @@ type CountryState = {
   gameWon: boolean
   score: number
   currentWord: string[]
+  index: number
 }
 
 const getRandomCountry = () => {
@@ -17,7 +18,8 @@ const initialState: CountryState = {
   country: "",
   gameWon: false,
   score: 0,
-  currentWord: [""]
+  currentWord: [""],
+  index: 0
 }
 
 const countrySlice = createSlice({
@@ -33,7 +35,9 @@ const countrySlice = createSlice({
       }
     },
     type: (state, action: PayloadAction<string>) => {
-        state.currentWord.push(action.payload)
+        state.currentWord.push(action.payload),
+        state.index +=1 
+        
     }
 
 
