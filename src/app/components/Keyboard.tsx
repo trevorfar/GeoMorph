@@ -2,6 +2,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../GlobalRedux/store";
 import { type } from "../GlobalRedux/Features/countrySlice";
+import { useEffect } from "react";
 
 const keys = {
   topRow: ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
@@ -16,6 +17,22 @@ const dispatch = useDispatch();
   const handleClick = (letter: string) => {
     dispatch(type(letter))
   }
+
+  useEffect(() => {
+    const handleKeyPress = (event: { key: string; }) => {
+      const key = event.key.toUpperCase();
+      if (keys.topRow.includes(key) || keys.middleRow.includes(key) || keys.bottomRow.includes(key)) {
+        handleClick(key);
+      }
+    };
+
+    window.addEventListener("keypress", handleKeyPress);
+
+    return () => {
+      window.removeEventListener("keypress", handleKeyPress);
+    };
+  }, []);
+
 
   return (
     <div className="flex flex-wrap justify-center w-full text-center">
