@@ -81,7 +81,7 @@ const Keyboard = () => {
       <div className="flex flex-wrap justify-center w-full text-center gap-1 p-1">
         {keys.topRow.map((letter, idx) => (
           <div
-            className="w-8 h-12 rounded-lg hover:bg-gray-300 bg-gray-400 justify-center items-center flex"
+            className="w-8 h-14 rounded-lg hover:bg-gray-300 bg-gray-400 justify-center items-center flex"
             key={letter}
             onClick={() => handleClick(letter)}
           >
@@ -94,7 +94,7 @@ const Keyboard = () => {
         {keys.middleRow.map((letter) => {
           return (
             <div
-              className="w-8 h-12 rounded-lg hover:bg-gray-300 bg-gray-400 justify-center items-center flex"
+              className="w-8 h-14 rounded-lg hover:bg-gray-300 bg-gray-400 justify-center items-center flex"
               key={letter}
               onClick={() => handleClick(letter)}
             >
@@ -108,8 +108,8 @@ const Keyboard = () => {
         {keys.bottomRow.map((letter, idx) => (
           <div
             className={`p-1 w-${
-              idx === 0 || idx === 9 ? "12" : "8"
-            } h-12 rounded-lg hover:bg-gray-300 bg-gray-400 justify-center items-center flex`}
+              idx === 0 || idx === 8 ? "12" : "8"
+            } h-14 rounded-lg hover:bg-gray-300 bg-gray-400 justify-center items-center flex`}
             key={letter}
             onClick={() => handleClick(letter)}
           >

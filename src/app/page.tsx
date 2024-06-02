@@ -23,7 +23,6 @@ const Page = () => {
       <GameContainer/>
       <div className="flex flex-col gap-4 justify-center items-center pt-2">
       <GuessContainer />
-      <button className="bg-red-700 w-16 h-8 rounded-xl text-white " onClick={() => dispatch(next())}>Skip</button>
       <div className="">
       <Keyboard />
       </div>
