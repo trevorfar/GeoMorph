@@ -99,7 +99,7 @@ const countries=[
 "Poland",
 "Qatar",
 "Romania",
-"Russian",
+"Russia",
 "Rwanda",
 "StLucia",
 "Samoa",

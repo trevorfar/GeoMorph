@@ -1,11 +1,11 @@
 "use client"
-import { useDispatch, useSelector } from "react-redux"
-import countries from "./countries"
-import { AppDispatch, RootState } from "./GlobalRedux/store"
+import { useEffect } from "react"
+import { useDispatch } from "react-redux"
 import { next } from "./GlobalRedux/Features/countrySlice"
+import { AppDispatch } from "./GlobalRedux/store"
 import GameContainer from "./components/GameContainer"
 import Keyboard from "./components/Keyboard"
-import { useEffect } from "react"
+import GuessContainer from "./components/GuessContainer"
 
 
 
@@ -18,10 +18,11 @@ const Page = () => {
   }, [dispatch])
 
   return (
-    <div className="flex justify-center items-center flex-col bg-slate-100 h-screen">
+    <div className="flex justify-center items-center flex-col bg-slate-200 h-screen select-none">
       <GameContainer/>
-      <div className="flex flex-col gap-4 justify-center items-center pt-2">
-      <button className="bg-green-400 w-16  h-8 rounded-xl" onClick={() => dispatch(next())}>Play</button>
+      <div className="flex flex-col gap-4 my-auto justify-center items-center pt-2">
+      <GuessContainer />
+      <button className="bg-red-700 w-16 h-8 rounded-xl text-white " onClick={() => dispatch(next())}>Skip</button>
       <Keyboard />
 
    </div>

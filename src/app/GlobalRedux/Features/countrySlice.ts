@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import countries from "../../countries"
 
 type CountryState = {
@@ -13,14 +13,27 @@ const getRandomCountry = () => {
   return countries[Math.floor(Math.random() * countries.length)]
 }
 
-
 const initialState: CountryState = {
   country: "",
   gameWon: false,
   score: 0,
   currentWord: [],
-  index: 0
+  index: 0,
 }
+
+export const submit = createAsyncThunk(
+  "country/submit",
+  async (_, { dispatch, getState }) => {
+    const state = getState() as { country: CountryState }
+    const { currentWord, country } = state.country
+    if (currentWord.join("") === country.toUpperCase()) {
+      dispatch(next())
+      dispatch(incrementScore())
+    }else{
+      console.log("Incorrect guess")
+    }
+  }
+)
 
 const countrySlice = createSlice({
   name: "country",
@@ -32,30 +45,27 @@ const countrySlice = createSlice({
         country: getRandomCountry(),
         currentWord: [],
         index: 0,
-        gameWon: false, 
+        gameWon: false,
         score: state.score,
       }
     },
     type: (state, action: PayloadAction<string>) => {
-        state.currentWord.push(action.payload),
-        state.index +=1
-        
+      state.currentWord.push(action.payload), (state.index += 1)
     },
     del: (state) => {
-        state.currentWord.pop(),
-        state.index -=1
+      state.currentWord.pop(), (state.index -= 1)
     },
-    submit: (state) => {
-        if(state.currentWord === Array.from(state.country)){
-          state.score += 1
-          dispatch(next)
-        }
-    }
-
-
+    incrementScore: (state) => {
+      state.score += 1
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(submit.fulfilled, (state) => {
+      state.gameWon = true
+    })
   },
 })
 
-export const { next, type, del } = countrySlice.actions
+export const { next, type, del, incrementScore } = countrySlice.actions
 
 export default countrySlice.reducer
