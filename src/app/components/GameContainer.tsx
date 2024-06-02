@@ -11,7 +11,7 @@ const GameContainer = () => {
   const geoJsonPath = "/AFG.geo.json"
 
   return (
-    <div className="flex flex-col h-96 w-full items-center justify-center">
+    <div className="flex flex-col h-72 w-full items-center justify-center">
       <div className="flex flex-row gap-4">
         <div className="flex flex-col">
           <div className="">

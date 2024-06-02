@@ -12,8 +12,8 @@ const CountryShape: React.FC<CountryShapeProps> = ({ geoJsonPath }) => {
   const { country } = useSelector((state: RootState) => state.country);
 
   useEffect(() => {
-    const width = 200;
-    const height = 200;
+    const width = 150;
+    const height = 150;
 
     const svg = d3.select(svgRef.current)
       .attr('width', width)

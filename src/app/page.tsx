@@ -18,13 +18,16 @@ const Page = () => {
   }, [dispatch])
 
   return (
-    <div className="flex justify-center items-center flex-col bg-slate-200 h-screen select-none">
+    <div className="flex justify-center md:rounded-xl items-center w-full md:w-96 mx-auto flex-col bg-yellow-400 h-screen select-none">
+      <div className="mb-16">
       <GameContainer/>
-      <div className="flex flex-col gap-4 my-auto justify-center items-center pt-2">
+      <div className="flex flex-col gap-4 justify-center items-center pt-2">
       <GuessContainer />
       <button className="bg-red-700 w-16 h-8 rounded-xl text-white " onClick={() => dispatch(next())}>Skip</button>
+      <div className="">
       <Keyboard />
-
+      </div>
+    </div>
    </div>
    </div>
   )
