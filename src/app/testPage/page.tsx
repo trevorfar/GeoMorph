@@ -1,14 +1,14 @@
 "use client"
 import CountryShape from "../components/CountryShape"
+import GeoJSONSelector from "./GeoJson"
 
 const page = () => {
     const geoJsonPath = "/AFG.geo.json"
 
   return (
     <div className="">
-        <CountryShape geoJsonPath={geoJsonPath} />
-
-    </div>
+        <GeoJSONSelector />
+     </div>
   )
 }
 

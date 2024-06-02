@@ -1,21 +1,49 @@
-"use client"
-import { RootState } from "../GlobalRedux/store"
-import CountryShape from "./CountryShape"
-import Skeleton from "./Skeleton"
-import { useDispatch, useSelector } from "react-redux"
+"use client";
 
-const GameContainer = () => {
-  const { country, currentWord, index, score } = useSelector(
-    (state: RootState) => state.country
-  )
-  const geoJsonPath = "/AFG.geo.json"
+import React, { useEffect, useState } from 'react';
+import { RootState } from '../GlobalRedux/store';
+import CountryShape from './CountryShape';
+import Skeleton from './Skeleton';
+import { useSelector } from 'react-redux';
+import { fetchGeoJSONData } from '../../utils/fetchGeo';
+
+interface GeoJSONFile {
+  name: string;
+  path: string;
+}
+
+const GameContainer: React.FC = () => {
+  const { country } = useSelector((state: RootState) => state.country);
+  const [geoJsonPath, setGeoJsonPath] = useState<string | null>(null);
+
+  useEffect(() => {
+    const getGeoJsonPath = async () => {
+      try {
+        const geojsonData: GeoJSONFile[] = await fetchGeoJSONData();
+        const matchingFile = geojsonData.find(file => file.name === country);
+        if (matchingFile) {
+          setGeoJsonPath(matchingFile.path);
+        }
+      } catch (error) {
+        console.error('Error fetching GeoJSON data:', error);
+      }
+    };
+
+    if (country) {
+      getGeoJsonPath();
+    }
+  }, [country]);
 
   return (
     <div className="flex flex-col h-72 w-full items-center justify-center">
       <div className="flex flex-row gap-4">
         <div className="flex flex-col">
           <div className="">
-            <CountryShape geoJsonPath={geoJsonPath} />
+            {geoJsonPath ? (
+              <CountryShape geoJsonPath={geoJsonPath} />
+            ) : (
+              <p>Loading...</p>
+            )}
           </div>
         </div>
       </div>
@@ -25,6 +53,7 @@ const GameContainer = () => {
         ))}
       </div>
     </div>
-  )
-}
-export default GameContainer
+  );
+};
+
+export default GameContainer;

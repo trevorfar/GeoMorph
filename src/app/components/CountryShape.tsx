@@ -1,13 +1,29 @@
-import React, { useEffect, useRef } from 'react';
+"use"
+import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { useSelector } from 'react-redux';
 import { RootState } from '../GlobalRedux/store';
+
+interface GeoJsonFeature {
+    type: string;
+    id: string;
+    properties: {
+      name: string;
+      [key: string]: any;
+    };
+    geometry: {
+      type: string;
+      coordinates: any;
+    };
+  }
 
 interface CountryShapeProps {
   geoJsonPath: string;
 }
 
 const CountryShape: React.FC<CountryShapeProps> = ({ geoJsonPath }) => {
+    const [geoData, setGeoData] = useState<Record<string, GeoJsonFeature>>({});
+
   const svgRef = useRef<SVGSVGElement | null>(null);
   const { country } = useSelector((state: RootState) => state.country);
 
@@ -24,9 +40,8 @@ const CountryShape: React.FC<CountryShapeProps> = ({ geoJsonPath }) => {
     const path = d3.geoPath().projection(projection);
 
     d3.json(geoJsonPath).then((data: any) => {
-      svg.selectAll('path').remove(); // Clear any existing paths
+      svg.selectAll('path').remove(); 
 
-      // Adjust the projection to fit the size of the SVG canvas
       projection.fitSize([width, height], data);
 
       svg.selectAll('path')
