@@ -33,7 +33,7 @@ const CountryShape: React.FC<CountryShapeProps> = ({ geoJsonPath }) => {
         .data(data.features)
         .enter().append('path')
         .attr('class', 'country')
-        .attr('d', path)
+        .attr('d', (d: any) => path(d) as string)
         .attr('fill', '#ccc')
         .attr('stroke', '#333');
     }).catch((error: any) => {
