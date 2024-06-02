@@ -45,6 +45,12 @@ const countrySlice = createSlice({
         state.currentWord.pop(),
         state.index -=1
     },
+    submit: (state) => {
+        if(state.currentWord === Array.from(state.country)){
+          state.score += 1
+          dispatch(next)
+        }
+    }
 
 
   },

@@ -5,12 +5,18 @@ import { AppDispatch, RootState } from "./GlobalRedux/store"
 import { next } from "./GlobalRedux/Features/countrySlice"
 import GameContainer from "./components/GameContainer"
 import Keyboard from "./components/Keyboard"
+import { useEffect } from "react"
 
 
 
 
 const Page = () => {
   const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(next())
+  }, [dispatch])
+
   return (
     <div className="flex justify-center items-center flex-col bg-slate-100 h-screen">
       <GameContainer/>
