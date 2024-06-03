@@ -1,47 +1,48 @@
 "use client"
-import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState } from "../GlobalRedux/store"
-import { type, del, submit } from "../GlobalRedux/Features/countrySlice"
-import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../GlobalRedux/store";
+import { type, del, submit } from "../GlobalRedux/Features/countrySlice";
+import { useEffect, useState } from "react";
 
 export const keys = {
   topRow: ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
   middleRow: ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
   bottomRow: ["Enter", "Z", "X", "C", "V", "B", "N", "M", "←"],
-}
+};
 
 const Keyboard = () => {
-  const dispatch = useDispatch<AppDispatch>()
-  const { index, country } = useSelector((state: RootState) => state.country)
+  const dispatch = useDispatch<AppDispatch>();
+  const { index, country } = useSelector((state: RootState) => state.country);
+  const [activeKey, setActiveKey] = useState<string | null>(null);
 
   const handleSubmit = () => {
-    dispatch(submit())
-  
-  }
+    dispatch(submit());
+  };
 
   const handleClick = (letter: string) => {
     switch (letter) {
       case keys.bottomRow[8].toUpperCase():
         if (index !== 0) {
-          dispatch(del())
+          dispatch(del());
         }
-        break
+        break;
       case "Enter":
-        handleSubmit()
-        break
+        handleSubmit();
+        break;
       case "BACKSPACE":
         if (index !== 0) {
-          dispatch(del())
+          dispatch(del());
         }
-        break
-      default:
-        dispatch(type(letter))
+        break;
+      default: if (index < Array.from(country).length) {
+        dispatch(type(letter));
+      }
     }
-  }
+  };
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      const key = event.key.toUpperCase()
+      const key = event.key.toUpperCase();
 
       if (
         keys.topRow.includes(key) ||
@@ -52,38 +53,48 @@ const Keyboard = () => {
       ) {
         switch (key) {
           case "ENTER":
-            handleSubmit()
-            break
+            handleSubmit();
+            break;
           case "BACKSPACE":
             if (index !== 0) {
-              handleClick(key)
+              handleClick(key);
             }
-            break
+            break;
           default:
             if (index < Array.from(country).length) {
-              handleClick(key)
+              handleClick(key);
             }
-            break
+            break;
         }
       }
-    }
+    };
 
-    window.addEventListener("keydown", handleKeyPress)
+    window.addEventListener("keydown", handleKeyPress);
     return () => {
-      window.removeEventListener("keydown", handleKeyPress)
-    }
-//prod push
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index, country])
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [index, country]);
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>, letter: string) => {
+    setActiveKey(letter);
+    setTimeout(() => {
+    }, 200); 
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    setActiveKey(null);
+  };
 
   return (
     <div className="flex flex-wrap justify-center w-full text-center select-none">
       <div className="flex flex-wrap justify-center w-full text-center gap-1 p-1">
-        {keys.topRow.map((letter, idx) => (
+        {keys.topRow.map((letter) => (
           <div
-            className="w-8 h-14 rounded-lg hover:bg-gray-300 bg-gray-400 justify-center items-center flex"
+            className={`w-8 h-14 rounded-lg ${activeKey === letter ? 'bg-gray-300' : 'bg-gray-400'} justify-center items-center flex`}
             key={letter}
             onClick={() => handleClick(letter)}
+            onTouchStart={(e) => handleTouchStart(e, letter)}
+            onTouchEnd={handleTouchEnd}
           >
             {letter}
           </div>
@@ -91,33 +102,34 @@ const Keyboard = () => {
       </div>
       <br />
       <div className="flex flex-wrap justify-center w-full text-center gap-1 p-1">
-        {keys.middleRow.map((letter) => {
-          return (
-            <div
-              className="w-8 h-14 rounded-lg hover:bg-gray-300 bg-gray-400 justify-center items-center flex"
-              key={letter}
-              onClick={() => handleClick(letter)}
-            >
-              {letter}
-            </div>
-          )
-        })}
+        {keys.middleRow.map((letter) => (
+          <div
+            className={`w-8 h-14 rounded-lg ${activeKey === letter ? 'bg-gray-300' : 'bg-gray-400'} justify-center items-center flex`}
+            key={letter}
+            onClick={() => handleClick(letter)}
+            onTouchStart={(e) => handleTouchStart(e, letter)}
+            onTouchEnd={handleTouchEnd}
+          >
+            {letter}
+          </div>
+        ))}
       </div>
       <br />
       <div className="flex flex-wrap justify-center w-full gap-1">
         {keys.bottomRow.map((letter, idx) => (
           <div
-            className={`p-1 w-${
-              idx === 0 || idx === 8 ? "12" : "8"
-            } h-14 rounded-lg hover:bg-gray-300 bg-gray-400 justify-center items-center flex`}
-            key={letter}
+            className={`p-1 w-${idx === 0 || idx === 8 ? "16" : "8"} h-14 rounded-lg ${activeKey === letter ? 'bg-gray-300' : 'bg-gray-400'} justify-center items-center flex`}
+            key={idx}
             onClick={() => handleClick(letter)}
+            onTouchStart={(e) => handleTouchStart(e, letter)}
+            onTouchEnd={handleTouchEnd}
           >
-          {letter}
+            {letter}
           </div>
         ))}
       </div>
     </div>
-  )
-}
-export default Keyboard
+  );
+};
+
+export default Keyboard;

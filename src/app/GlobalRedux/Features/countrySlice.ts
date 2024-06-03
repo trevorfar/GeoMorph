@@ -7,6 +7,9 @@ type CountryState = {
   score: number
   currentWord: string[]
   index: number
+  guesses: string[]
+
+
 }
 
 const getRandomCountry = () => {
@@ -19,6 +22,7 @@ const initialState: CountryState = {
   score: 0,
   currentWord: [],
   index: 0,
+  guesses: []
 }
 
 export const submit = createAsyncThunk(
@@ -29,8 +33,11 @@ export const submit = createAsyncThunk(
     if (currentWord.join("") === country.toUpperCase()) {
       dispatch(next())
       dispatch(incrementScore())
-    }else{
-      console.log("Incorrect guess")
+    }else if (currentWord.length === country.length){
+      dispatch(incorrectGuess())
+    }
+    else{
+        return
     }
   }
 )
@@ -47,6 +54,7 @@ const countrySlice = createSlice({
         index: 0,
         gameWon: false,
         score: state.score,
+        guesses: [], 
       }
     },
     type: (state, action: PayloadAction<string>) => {
@@ -57,6 +65,10 @@ const countrySlice = createSlice({
     },
     incrementScore: (state) => {
       state.score += 1
+    },    
+    incorrectGuess: (state) => {
+      state.guesses.push(state.currentWord.join(''))
+
     },
   },
   extraReducers: (builder) => {
@@ -66,6 +78,6 @@ const countrySlice = createSlice({
   },
 })
 
-export const { next, type, del, incrementScore } = countrySlice.actions
+export const { next, type, del, incrementScore, incorrectGuess } = countrySlice.actions
 
 export default countrySlice.reducer

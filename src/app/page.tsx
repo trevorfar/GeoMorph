@@ -18,7 +18,7 @@ const Page = () => {
   }, [dispatch])
 
   return (
-    <div className="flex justify-center md:rounded-xl items-center w-full md:w-96 mx-auto flex-col bg-yellow-400 h-screen select-none">
+    <div className="flex justify-center md:rounded-xl items-center w-full md:w-3/5 mx-auto flex-col bg-yellow-500 h-screen select-none">
       <div className="mb-16">
       <GameContainer/>
       <div className="flex flex-col gap-4 justify-center items-center pt-2">

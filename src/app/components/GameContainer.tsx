@@ -38,6 +38,9 @@ const GameContainer: React.FC = () => {
     <div className="flex flex-col h-72 w-full items-center justify-center">
       <div className="flex flex-row gap-4">
         <div className="flex flex-col">
+          <p className="justify-center items-center flex  pb-2 md:pb-0 md:pt-4">
+            {country}
+          </p>
           <div className="">
             {geoJsonPath ? (
               <CountryShape geoJsonPath={geoJsonPath} />
@@ -57,4 +60,3 @@ const GameContainer: React.FC = () => {
 };
 
 export default GameContainer;
-  
