@@ -123,11 +123,9 @@ const countrySlice = createSlice({
       state.score += 1
     },
     decrementScore: (state) => {
-      if (state.score >= 2) {
-        state.score -= 2
-      } else {
-        state.score -= state.score
-      }
+      if (state.score >= 1) {
+        state.score -= 1
+      } 
     },
     incorrectGuess: (state) => {
       state.guesses.push(state.currentWord.join(""))
