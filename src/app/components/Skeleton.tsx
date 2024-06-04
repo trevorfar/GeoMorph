@@ -15,14 +15,14 @@ const Skeleton = ({ index }: SkeletonProps) => {
 
   if (country[index] === country[index].toUpperCase() && country[index] !== country[index].toLowerCase() && index !== 0) {
     return (
-      <div className="border-b-2 border-blue-500 w-4 h-12 md:w-8 ml-4 flex items-center justify-center">
+      <div className="border-b-2 border-slate-900 w-4 h-12 md:w-8 ml-4 flex items-center justify-center">
         {typedLetter || ""}
       </div>
     );
   }
 
   return (
-    <div className="border-b-2 border-blue-500 w-8 h-12 md:w-8 flex items-center justify-center">
+    <div className="border-b-2 border-slate-900 w-8 h-12 md:w-8 flex items-center justify-center">
       {typedLetter || ""}
     </div>
   );
