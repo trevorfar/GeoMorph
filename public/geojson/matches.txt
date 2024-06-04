@@ -29,11 +29,9 @@ Costa Rica
 Kosovo
 Cuba
 Cyprus
-Czech Republic
 Germany
 Djibouti
 Denmark
-Dominican Republic
 Algeria
 Ecuador
 Egypt
@@ -45,12 +43,10 @@ Finland
 Fiji
 France
 Gabon
-United Kingdom
 Georgia
 Ghana
 Guinea
 Gambia
-Equatorial Guinea
 Greece
 Guatemala
 Guyana
@@ -72,6 +68,7 @@ Kazakhstan
 Kenya
 Kyrgyzstan
 Cambodia
+South Korea
 Kuwait
 Laos
 Lebanon
@@ -109,17 +106,17 @@ Pakistan
 Panama
 Peru
 Philippines
-Papua New Guinea
 Poland
+North Korea
 Portugal
 Paraguay
 Qatar
 Romania
+Russia
 Rwanda
 Saudi Arabia
 Sudan
 Senegal
-Solomon Islands
 Sierra Leone
 El Salvador
 Somalia
@@ -134,7 +131,6 @@ Chad
 Togo
 Thailand
 Tajikistan
-Turkmenistan
 East Timor
 Tunisia
 Turkey
