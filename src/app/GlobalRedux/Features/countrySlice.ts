@@ -8,6 +8,7 @@ type CountryState = {
   currentWord: string[]
   index: number
   guesses: string[]
+  hintIndices: number[]
 }
 
 const getRandomCountry = () => {
@@ -16,15 +17,26 @@ const getRandomCountry = () => {
 
 const getRandomHint = (country: string) => {
   const randomIndex1 = Math.floor(Math.random() * country.length)
-  let randomIndex2
+  let randomIndex2, randomIndex3
   do {
     randomIndex2 = Math.floor(Math.random() * country.length)
-  } while (randomIndex1 === randomIndex2)
+    randomIndex3 = Math.floor(Math.random() * country.length)
+  } while (
+    randomIndex1 === randomIndex2 ||
+    randomIndex1 === randomIndex3 ||
+    randomIndex2 === randomIndex3
+  )
 
-  const resultArray = new Array(country.length).fill("")
-  resultArray[randomIndex1] = country[randomIndex1]
-  resultArray[randomIndex2] = country[randomIndex2]
-  return resultArray
+  const resultArray: string[] = country
+    .split("")
+    .map((char) => (char === " " ? " " : ""))
+  resultArray[randomIndex1] = country[randomIndex1].toUpperCase()
+  resultArray[randomIndex2] = country[randomIndex2].toUpperCase()
+  resultArray[randomIndex3] = country[randomIndex3].toUpperCase()
+  return {
+    hint: resultArray,
+    hintIndices: [randomIndex1, randomIndex2, randomIndex3],
+  }
 }
 
 const initialState: CountryState = {
@@ -34,6 +46,7 @@ const initialState: CountryState = {
   currentWord: [],
   index: 0,
   guesses: [],
+  hintIndices: [],
 }
 
 export const submit = createAsyncThunk(
@@ -41,13 +54,14 @@ export const submit = createAsyncThunk(
   async (_, { dispatch, getState }) => {
     const state = getState() as { country: CountryState }
     const { currentWord, country } = state.country
+    if (currentWord.length !== country.length) {
+      return
+    }
     if (currentWord.join("") === country.toUpperCase()) {
       dispatch(nextGame())
       dispatch(incrementScore())
-    } else if (currentWord.length === country.length) {
-      dispatch(incorrectGuess())
     } else {
-      return
+      dispatch(incorrectGuess())
     }
   }
 )
@@ -56,8 +70,18 @@ export const nextGame = createAsyncThunk(
   "country/nextGame",
   async (_, { dispatch }) => {
     const newCountry = getRandomCountry()
-    const newHint = getRandomHint(newCountry)
-    dispatch(setNextGame({ country: newCountry, currentWord: newHint }))
+    const { hint, hintIndices } = getRandomHint(newCountry)
+    dispatch(
+      setNextGame({ country: newCountry, currentWord: hint, hintIndices })
+    )
+  }
+)
+
+export const skipGame = createAsyncThunk(
+  "country/skipGame",
+  async (_, { dispatch }) => {
+    dispatch(decrementScore())
+    dispatch(nextGame())
   }
 )
 
@@ -66,32 +90,71 @@ const countrySlice = createSlice({
   initialState,
   reducers: {
     type: (state, action: PayloadAction<string>) => {
-      state.currentWord.push(action.payload)
-      state.index += 1
+      while (
+        state.index < state.country.length &&
+        (state.hintIndices.includes(state.index) ||
+          state.country[state.index] === " ")
+      ) {
+        state.index += 1
+      }
+      if (
+        state.index < state.country.length &&
+        state.country[state.index] !== " "
+      ) {
+        state.currentWord[state.index] = action.payload
+        state.index += 1
+      }
     },
     del: (state) => {
-      state.currentWord.pop()
-      state.index -= 1
+      while (
+        state.index > 0 &&
+        (state.hintIndices.includes(state.index - 1) ||
+          state.country[state.index - 1] === " ")
+      ) {
+        state.index -= 1
+      }
+      if (state.index > 0) {
+        state.index -= 1
+        state.currentWord[state.index] = ""
+      }
     },
     incrementScore: (state) => {
       state.score += 1
+    },
+    decrementScore: (state) => {
+      if (state.score >= 2) {
+        state.score -= 2
+      } else {
+        state.score -= state.score
+      }
     },
     incorrectGuess: (state) => {
       state.guesses.push(state.currentWord.join(""))
     },
     setNextGame: (
       state,
-      action: PayloadAction<{ country: string; currentWord: string[] }>
+      action: PayloadAction<{
+        country: string
+        currentWord: string[]
+        hintIndices: number[]
+      }>
     ) => {
       state.country = action.payload.country
       state.currentWord = action.payload.currentWord
+      state.hintIndices = action.payload.hintIndices
       state.index = 0
       state.gameWon = false
       state.guesses = []
     },
     updateCurrentWord: (state, action: PayloadAction<string>) => {
-      state.currentWord.push(action.payload)
-      state.index += 1
+      if (
+        state.index < state.country.length &&
+        !state.hintIndices.includes(state.index) &&
+        state.country[state.index] !== " "
+      ) {
+        state.currentWord[state.index] = action.payload
+        state.index += 1
+      }
     },
   },
   extraReducers: (builder) => {
@@ -108,6 +171,7 @@ export const {
   incorrectGuess,
   setNextGame,
   updateCurrentWord,
+  decrementScore,
 } = countrySlice.actions
 
 export default countrySlice.reducer

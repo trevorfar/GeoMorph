@@ -12,8 +12,8 @@ interface GeoJSONFile {
   path: string;
 }
 
-const GameContainer: React.FC = () => {
-  const { country } = useSelector((state: RootState) => state.country);
+const GameContainer = () => {
+  const { country, score } = useSelector((state: RootState) => state.country);
   const [geoJsonPath, setGeoJsonPath] = useState<string | null>(null);
 
   useEffect(() => {
@@ -37,15 +37,15 @@ const GameContainer: React.FC = () => {
   return (
     <div className="flex flex-col h-72 w-full items-center justify-center">
       <div className="flex flex-row gap-4">
-        <div className="flex flex-col">
-          <p className="justify-center items-center flex  pb-2 md:pb-0 md:pt-4">
-            {country}
-          </p>
+        <div className="flex-col md:flex-row lg:flex-col flex">
+          <div className="justify-center items-center flex pb-2 pr-8 md:pb-0 md:pt-4">
+            <p className='text-3xl font-bold'>{score}</p>
+          </div>
           <div className="">
             {geoJsonPath ? (
               <CountryShape geoJsonPath={geoJsonPath} />
             ) : (
-              <p>Loading...</p>
+              <></>
             )}
           </div>
         </div>

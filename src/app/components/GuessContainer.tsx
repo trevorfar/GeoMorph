@@ -1,6 +1,7 @@
+"use client"
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../GlobalRedux/store";
-import { nextGame } from "../GlobalRedux/Features/countrySlice"
+import { nextGame, skipGame } from "../GlobalRedux/Features/countrySlice"
 
 const GuessContainer = () => {
     const { country, guesses } = useSelector((state: RootState) => state.country);
@@ -19,7 +20,7 @@ const GuessContainer = () => {
         </div>
 
         <div className="bg-gray-300 items-center flex justify-center">
-        <button className="bg-red-700 w-16 h-8 rounded-xl text-white " onClick={() => dispatch(nextGame())}>Skip</button>
+        <button className="bg-red-700 w-16 h-8 rounded-xl text-white select-none" onClick={() => dispatch(skipGame())}>Skip</button>
         </div>
         
 

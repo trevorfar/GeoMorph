@@ -35,6 +35,7 @@ const Keyboard = () => {
         }
         break;
       default: if (index < Array.from(country).length) {
+        
         dispatch(type(letter));
       }
     }
