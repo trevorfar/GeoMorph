@@ -119,7 +119,7 @@ const Keyboard = () => {
       <div className="flex flex-wrap justify-center w-full gap-1">
         {keys.bottomRow.map((letter, idx) => (
           <div
-            className={`p-1 w-${idx === 0 || idx === 8 ? "16" : "8"} h-14 rounded-lg ${activeKey === letter ? 'bg-gray-300' : 'bg-gray-400'} justify-center items-center flex`}
+            className={` w-${idx === 0 || idx === 8 ? "16" : "8"} h-14  rounded-lg ${activeKey === letter ? 'bg-gray-300' : 'bg-gray-400'} justify-center items-center flex`}
             key={idx}
             onClick={() => handleClick(letter)}
             onTouchStart={(e) => handleTouchStart(e, letter)}

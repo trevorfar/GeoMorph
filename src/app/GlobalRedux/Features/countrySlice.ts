@@ -54,7 +54,8 @@ export const submit = createAsyncThunk(
   async (_, { dispatch, getState }) => {
     const state = getState() as { country: CountryState }
     const { currentWord, country } = state.country
-    if (currentWord.length !== country.length) {
+    const filteredCurrentWord = currentWord.filter((letter) => letter !== "")
+    if (filteredCurrentWord.length !== country.length) {
       return
     }
     if (currentWord.join("") === country.toUpperCase()) {
