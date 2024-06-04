@@ -1,7 +1,7 @@
 "use client"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
-import { next } from "./GlobalRedux/Features/countrySlice"
+import { nextGame } from "./GlobalRedux/Features/countrySlice"
 import { AppDispatch } from "./GlobalRedux/store"
 import GameContainer from "./components/GameContainer"
 import Keyboard from "./components/Keyboard"
@@ -14,7 +14,7 @@ const Page = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    dispatch(next())
+    dispatch(nextGame())
   }, [dispatch])
 
   return (
