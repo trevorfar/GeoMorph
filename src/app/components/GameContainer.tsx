@@ -6,15 +6,25 @@ import CountryShape from './CountryShape';
 import Skeleton from './Skeleton';
 import { useSelector } from 'react-redux';
 import { fetchGeoJSONData } from '../../utils/fetchGeo';
+import clsx from 'clsx';
 
 interface GeoJSONFile {
   name: string;
   path: string;
 }
 
-const GameContainer = () => {
-  const { country, score } = useSelector((state: RootState) => state.country);
+const GameContainer = ({ isActive, isDisabled }: { isActive: boolean; isDisabled: boolean }) => {
+  const { country, score, hints, currStreak } = useSelector((state: RootState) => state.country);
   const [geoJsonPath, setGeoJsonPath] = useState<string | null>(null);
+
+  if(currStreak >= 5){
+    isActive = true;
+    isDisabled = false;
+  }else {
+    isDisabled = true;
+    isActive = false;
+  }
+  
 
   useEffect(() => {
     const getGeoJsonPath = async () => {
@@ -37,9 +47,20 @@ const GameContainer = () => {
   return (
     <div className="flex flex-col h-72 w-full items-center justify-center">
       <div className="flex flex-row gap-4">
-        <div className="flex-col md:flex-row lg:flex-col flex">
-          <div className="justify-center items-center flex pb-2 pr-8 md:pb-0 md:pt-4">
-            <p className='text-3xl font-bold'>{score}</p>
+        <div className="flex-col flex">
+          <div className="flex flex-col pb-2 mb-2 pr-8 md:pb-0 md:pt-4 items-center justify-center ">
+          <div className="flex flex-row gap-4">
+            <div className={clsx('text-3xl flex flex-row gap-2 font-bold bg-clip-text text-transparent', isActive && 'bg-gradient-to-r from-red-500 via-yellow-500 to-purple-500', isDisabled && 'text-white')}>
+              Hints: <p className="text-black">{hints}</p>
+            </div>
+            <div className={clsx('text-3xl flex flex-row gap-2 font-bold bg-clip-text text-transparent', isActive && 'bg-gradient-to-r from-red-500 via-yellow-500 to-purple-500', isDisabled && 'text-white')}>
+            Streak: <p className="text-black">{currStreak}</p>
+          </div>
+          </div>
+          <div className={clsx('text-3xl flex flex-row gap-2 font-bold bg-clip-text text-transparent', isActive && 'bg-gradient-to-r from-red-500 via-yellow-500 to-purple-500', isDisabled && 'text-white')}>
+            Score: <p className="text-black">{score}</p>
+          </div>
+         
           </div>
           <div className="">
             {geoJsonPath ? (

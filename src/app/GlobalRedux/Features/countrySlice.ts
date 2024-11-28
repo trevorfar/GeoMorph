@@ -9,6 +9,9 @@ type CountryState = {
   index: number
   guesses: string[]
   hintIndices: number[]
+  hints: number
+  currStreak: number
+  hintRewardedAtStreak: number
 }
 
 const getRandomCountry = () => {
@@ -16,27 +19,31 @@ const getRandomCountry = () => {
 }
 
 const getRandomHint = (country: string) => {
-  const randomIndex1 = Math.floor(Math.random() * country.length)
-  let randomIndex2, randomIndex3
-  do {
-    randomIndex2 = Math.floor(Math.random() * country.length)
-    randomIndex3 = Math.floor(Math.random() * country.length)
-  } while (
-    randomIndex1 === randomIndex2 ||
-    randomIndex1 === randomIndex3 ||
-    randomIndex2 === randomIndex3
-  )
+  const numSpaces = country.split(" ").length - 1
+  const countryLength = country.length - numSpaces;
+  const hintIndices: number[] = [];
+
+  const numHints = countryLength > 5 ? 3 : 2; 
+  
+
+  while (hintIndices.length < numHints) {
+    let randomIndex = Math.floor(Math.random() * country.length);
+    if(country[randomIndex] != " " && !hintIndices.includes(randomIndex)){
+      hintIndices.push(randomIndex);
+    }
+  }
+  
+
 
   const resultArray: string[] = country
-    .split("")
-    .map((char) => (char === " " ? " " : ""))
-  resultArray[randomIndex1] = country[randomIndex1].toUpperCase()
-  resultArray[randomIndex2] = country[randomIndex2].toUpperCase()
-  resultArray[randomIndex3] = country[randomIndex3].toUpperCase()
+  .split("")
+  .map((char, idx) => (hintIndices.includes(idx) || char === " " ? char : "").toUpperCase());
+
   return {
-    hint: resultArray,
-    hintIndices: [randomIndex1, randomIndex2, randomIndex3],
-  }
+    hint: resultArray, 
+    hintIndices,
+  };
+
 }
 
 const initialState: CountryState = {
@@ -47,6 +54,9 @@ const initialState: CountryState = {
   index: 0,
   guesses: [],
   hintIndices: [],
+  hints: 3,
+  currStreak: 0,
+  hintRewardedAtStreak: 0
 }
 
 export const submit = createAsyncThunk(
@@ -54,15 +64,18 @@ export const submit = createAsyncThunk(
   async (_, { dispatch, getState }) => {
     const state = getState() as { country: CountryState }
     const { currentWord, country } = state.country
+
     const filteredCurrentWord = currentWord.filter((letter) => letter !== "")
+
     if (filteredCurrentWord.length !== country.length) {
       return
     }
+
     if (currentWord.join("") === country.toUpperCase()) {
       dispatch(nextGame())
       dispatch(incrementScore())
     } else {
-      dispatch(incorrectGuess())
+      dispatch(incorrectGuess(currentWord.join("")))
     }
   }
 )
@@ -77,6 +90,7 @@ export const nextGame = createAsyncThunk(
     )
   }
 )
+
 
 export const skipGame = createAsyncThunk(
   "country/skipGame",
@@ -106,6 +120,27 @@ const countrySlice = createSlice({
         state.index += 1
       }
     },
+    getHint: (state) => {
+      if(state.hints <= 0) return;
+      const unrevealedIndices = state.country
+      .split("")
+      .map((char, idx) => idx)
+      .filter(
+        (idx) =>
+          !state.hintIndices.includes(idx) && 
+          state.currentWord[idx] === "" &&    
+          state.country[idx] !== " "         
+      );
+
+      if(unrevealedIndices.length > 0){
+        const randomIndex =
+        unrevealedIndices[Math.floor(Math.random() * unrevealedIndices.length)];
+
+        state.hintIndices.push(randomIndex); 
+        state.currentWord[randomIndex] = state.country[randomIndex].toUpperCase();
+        state.hints--;
+      }
+    },
     del: (state) => {
       while (
         state.index > 0 &&
@@ -119,16 +154,44 @@ const countrySlice = createSlice({
         state.currentWord[state.index] = ""
       }
     },
+
     incrementScore: (state) => {
-      state.score += 1
+      if (state.currStreak >= 9 && state.hintRewardedAtStreak < 9) {
+        state.hints += 2;
+        state.hintRewardedAtStreak = 9;  
+      } else if (state.currStreak >= 4 && state.hintRewardedAtStreak < 4) {
+        state.hints++;
+        state.hintRewardedAtStreak = 4;  
+      }
+    
+      if (state.currStreak >= 9) {
+        state.score += 3;
+      } else if (state.currStreak >= 4) {
+        state.score += 2;
+      } else {
+        state.score += 1;
+      }
+    
+      state.currStreak++;
     },
+    
     decrementScore: (state) => {
       if (state.score >= 1) {
         state.score -= 1
       } 
+      if(state.score === 0){
+        state.hints = 3;
+      }
+      state.currStreak = 0;
     },
-    incorrectGuess: (state) => {
+
+    incorrectGuess: (state, action: PayloadAction<string>) => {
+      const guess = action.payload;
+      
+      if(!state.guesses.includes(guess)){
       state.guesses.push(state.currentWord.join(""))
+      }
+      state.currStreak = 0;
     },
     setNextGame: (
       state,
@@ -171,6 +234,8 @@ export const {
   setNextGame,
   updateCurrentWord,
   decrementScore,
+  getHint
+  
 } = countrySlice.actions
 
 export default countrySlice.reducer
