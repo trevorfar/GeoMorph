@@ -18,7 +18,7 @@ const Page = () => {
   const [showSignin, setShowSignin] = useState(false);
 
   useEffect(() => {
-    if(promptSignin()){
+    if(!promptSignin()){
       setShowSignin(true);
     }
   }, [])
@@ -40,7 +40,7 @@ const Page = () => {
       <GuessContainer />
       </div>
       <div className="">
-      <Keyboard />
+      {!showSignin && !showLeaderboard && <Keyboard />}
       </div>
       <div className="flex flex-row gap-4">
       <button 
