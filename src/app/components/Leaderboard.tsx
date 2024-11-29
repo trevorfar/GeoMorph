@@ -52,7 +52,12 @@ const Leaderboard = () => {
             users.map((user, index) => (
               <div
                 key={index}
-                className="flex justify-between items-center p-4 bg-white shadow-md rounded-md"
+                className={`flex justify-between items-center p-4 shadow-md rounded-md ${
+                          index === 0 ? "bg-yellow-500 text-white" : 
+                          index === 1 ? "bg-gray-400 text-white" : 
+                          index === 2 ? "bg-yellow-800 text-white" : 
+                          "bg-white"
+                          }`}
               >
                 <span className="text-lg font-medium">{user.username}</span>
                 <span className="text-lg font-semibold text-blue-500">

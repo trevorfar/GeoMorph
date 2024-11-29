@@ -4,7 +4,7 @@ function getChangeLog(){
 
     Version 1.0.2: 
     - Added a leaderboard
-    - Connected a mongo db 
+    - Connected mongo db 
     - Added usernames (beta)
     - Adjusted various colors 
     - Savable score ( Leaderboard mode only )

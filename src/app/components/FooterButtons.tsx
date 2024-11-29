@@ -1,13 +1,15 @@
-
+"use client"
 import { openChangelog } from "@/utils/changeLog"
 import { useState } from "react";
 import Leaderboard from "./Leaderboard";
+import { useRouter } from "next/navigation";
 
 const FooterButtons = ({setIsLeaderboardVisible,
 }: {
   setIsLeaderboardVisible: (visible: boolean) => void;
 }) => {
     const [showLeaderboard, setShowLeaderboard] = useState(false);
+    const router = useRouter()
 
     return (
         <>
@@ -26,6 +28,14 @@ const FooterButtons = ({setIsLeaderboardVisible,
         className="bg-purple-700 text-white py-2 px-4 rounded-xl hover:bg-purple-700/80 hover:text-opacity-55"
       >
         View Leaderboard
+      </button>
+      <button 
+        onClick={() => {
+            router.push('/');
+        }}
+        className="bg-purple-700 text-white py-2 px-4 rounded-xl hover:bg-purple-700/80 hover:text-opacity-55"
+      >
+        Switch Gamemode
       </button>
       </div>
    
