@@ -15,8 +15,10 @@
     }
   }
 
-    @layer base {
-      body {
-        @apply bg-violet-400;
-      }
+  @layer base {
+    body {
+      @apply bg-violet-400;
     }
+  }
+  
+ 

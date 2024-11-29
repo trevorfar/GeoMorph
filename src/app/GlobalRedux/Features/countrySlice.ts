@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import countries from "../../countries"
+import { GameMode } from "../../../../types"
+
 
 type CountryState = {
   country: string
@@ -12,6 +14,8 @@ type CountryState = {
   hints: number
   currStreak: number
   hintRewardedAtStreak: number
+  activeGameMode: GameMode;
+  gameModeData: Record<string, any>;
 }
 
 const getRandomCountry = () => {
@@ -56,7 +60,9 @@ const initialState: CountryState = {
   hintIndices: [],
   hints: 3,
   currStreak: 0,
-  hintRewardedAtStreak: 0
+  hintRewardedAtStreak: 0,
+  activeGameMode: 'classic', 
+  gameModeData: {},
 }
 
 export const submit = createAsyncThunk(
@@ -82,8 +88,12 @@ export const submit = createAsyncThunk(
 
 export const nextGame = createAsyncThunk(
   "country/nextGame",
-  async (_, { dispatch }) => {
+  async (_, { dispatch, getState }) => {
     const newCountry = getRandomCountry()
+
+    const state = getState() as { country: CountryState };
+    const { activeGameMode, gameModeData } = state.country;
+
     const { hint, hintIndices } = getRandomHint(newCountry)
     dispatch(
       setNextGame({ country: newCountry, currentWord: hint, hintIndices })
@@ -208,6 +218,11 @@ const countrySlice = createSlice({
       state.gameWon = false
       state.guesses = []
     },
+    setActiveGamemode: (state, action: PayloadAction<GameMode>) => {
+      state.activeGameMode = action.payload;
+      console.log(state.activeGameMode);
+
+    },
     updateCurrentWord: (state, action: PayloadAction<string>) => {
       if (
         state.index < state.country.length &&
@@ -234,7 +249,8 @@ export const {
   setNextGame,
   updateCurrentWord,
   decrementScore,
-  getHint
+  getHint,
+  setActiveGamemode,
   
 } = countrySlice.actions
 
