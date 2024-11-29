@@ -6,8 +6,8 @@ type UserState = {
 };
 
 const initialUserState: UserState = {
-  username: localStorage.getItem("username") || "",  // Default is an empty string
-  topScore: Number(localStorage.getItem("topScore")) || 0,  // Default top score
+  username: typeof window !== "undefined" ? localStorage.getItem("username") || "" : "",  // Default is an empty string
+  topScore: typeof window !== "undefined" ? Number(localStorage.getItem("topScore")) || 0 : 0,  // Default top score
 };
 
 const userSlice = createSlice({
@@ -16,12 +16,12 @@ const userSlice = createSlice({
   reducers: {
     setUsername: (state, action: PayloadAction<string>) => {
       state.username = action.payload;
-      localStorage.setItem("username", action.payload);
+      typeof window !== "undefined" ? localStorage.setItem("username", action.payload) : undefined;
     },
     setTopScore: (state, action: PayloadAction<number>) => {
       if (action.payload > state.topScore) {
         state.topScore = action.payload; 
-        localStorage.setItem("topscore", action.payload.toString());
+        typeof window !== "undefined" ? localStorage.setItem("topscore", action.payload.toString()) : undefined;
       }
     },
   },
