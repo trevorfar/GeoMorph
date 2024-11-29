@@ -23,8 +23,8 @@ const GameModeContainer = ({ obj, bgColor } : { obj: GameMode, bgColor: string})
         }}
         className={`outline border-black border-1 w-full p-2 rounded-xl ${bgColor} 
         hover:bg-opacity-60 transition-all duration-200 cursor-pointer animate-jiggle `}>
-               <div className="text-3xl font-semibold text-white">
-                GO!
+               <div className="text-3xl font-semibold">
+                {obj}
                </div>
         </button>
     )
