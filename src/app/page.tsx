@@ -7,7 +7,7 @@ import GameContainer from "./components/GameContainer"
 import Keyboard from "./components/Keyboard"
 import GuessContainer from "./components/GuessContainer"
 import Leaderboard from "./components/Leaderboard"
-import { getChangeLog, openChangelog } from "@/utils/changeLog"
+import { openChangelog } from "@/utils/changeLog"
 
 
 const Page = () => {

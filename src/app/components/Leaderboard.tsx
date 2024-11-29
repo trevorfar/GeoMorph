@@ -25,8 +25,9 @@ const Leaderboard = () => {
             }
             const data = await response.json();
             setUsers(data.users);
-          } catch (error) {
-            setError((error).message);
+          } catch (error: unknown) {
+            const typedError = error as Error;
+            setError(typedError.message);
           } finally {
             setLoading(false);
           }
