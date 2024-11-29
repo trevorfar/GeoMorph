@@ -7,6 +7,7 @@ import GameContainer from "./components/GameContainer"
 import Keyboard from "./components/Keyboard"
 import GuessContainer from "./components/GuessContainer"
 import Leaderboard from "./components/Leaderboard"
+import { getChangeLog, openChangelog } from "@/utils/changeLog"
 
 
 const Page = () => {
@@ -18,27 +19,7 @@ const Page = () => {
     dispatch(nextGame())
   }, [dispatch])
 
-  const openChangelog = () => {
-    const changelogContent = `
-    Changelog:
-
-    Version 1.0.1:
-    - Fixed bug where guesses were not being tracked correctly
-    - Added a current streak, once you get 5 your score goes up by 2 and you're awarded an additonal hint. At 10, it goes up by 3 and you get 2 more hints.
-    - Added new hints feature
-
-    Version 1.0.0:
-    - Initial release
-    `;
-
-    const blob = new Blob([changelogContent], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.target = "_blank"; // Opens in a new tab
-    link.click(); // Trigger the download/opening of the file
-    URL.revokeObjectURL(url); // Clean up the object URL after use
-  };
+  
 
 
 
@@ -56,14 +37,14 @@ const Page = () => {
       </div>
       <div className="flex flex-row gap-4">
       <button 
-          onClick={openChangelog}
-          className="bg-purple-700 text-white py-2 px-4 rounded-xl hover:"
+          onClick={() => openChangelog()}
+          className="bg-purple-700 text-white py-2 px-4 rounded-xl hover:bg-purple-700/80 hover:text-opacity-55"
         >
           View Changelog
       </button>
       <button 
         onClick={() => setShowLeaderboard(true)}
-        className="bg-purple-700 text-white py-2 px-4 rounded-xl"
+        className="bg-purple-700 text-white py-2 px-4 rounded-xl hover:bg-purple-700/80 hover:text-opacity-55"
       >
         View Leaderboard
       </button>

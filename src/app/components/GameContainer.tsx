@@ -45,16 +45,16 @@ const GameContainer = ({ isActive, isDisabled }: { isActive: boolean; isDisabled
   }, [country]);
 
   return (
-    <div className="flex flex-col gap-4 md:gap-8 ">
-      <div className="flex flex-row gap-8 w-full justify-between">
-        <div className={clsx('text-3xl flex flex-row gap-2 font-bold bg-clip-text text-transparent', isActive && 'bg-gradient-to-r from-red-500 via-yellow-500 to-purple-500', isDisabled && 'text-white')}>
+    <div className="flex flex-col gap-4 md:gap-8 relative">
+      <div className="flex flex-col md:flex-row gap-1 md:gap-8 w-full items-center justify-center fixed top-0 left-0 right-0 z-10">
+        <div className={clsx('text-xl md:text-3xl flex flex-row gap-2 font-bold bg-clip-text text-transparent', isActive && 'bg-gradient-to-r from-red-500 via-yellow-500 to-purple-500', isDisabled && 'text-white')}>
           Hints: <p className="text-black">{hints}</p>
         </div>
         
-        <div className={clsx('text-3xl flex flex-row gap-2 font-bold bg-clip-text text-transparent', isActive && 'bg-gradient-to-r from-red-500 via-yellow-500 to-purple-500', isDisabled && 'text-white')}>
+        <div className={clsx('text-2xl md:text-3xl flex flex-row gap-2 font-bold bg-clip-text text-transparent', isActive && 'bg-gradient-to-r from-red-500 via-yellow-500 to-purple-500', isDisabled && 'text-white')}>
         Score: <p className="text-black">{score}</p>
         </div>
-        <div className={clsx('text-3xl flex flex-row gap-2 font-bold bg-clip-text text-transparent', isActive && 'bg-gradient-to-r from-red-500 via-yellow-500 to-purple-500', isDisabled && 'text-white')}>
+        <div className={clsx('text-xl md:text-3xl flex flex-row gap-2 font-bold bg-clip-text text-transparent', isActive && 'bg-gradient-to-r from-red-500 via-yellow-500 to-purple-500', isDisabled && 'text-white')}>
         Streak: <p className="text-black">{currStreak}</p>
         </div>
     </div>
