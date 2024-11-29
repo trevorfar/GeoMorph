@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../GlobalRedux/store";
 import { type, del, submit } from "../GlobalRedux/Features/countrySlice";
 import { useEffect, useState } from "react";
+import { mobileCheck } from "@/utils/determineConnection";
 
 export const keys = {
   topRow: ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
@@ -14,7 +15,7 @@ const Keyboard = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { index, country } = useSelector((state: RootState) => state.country);
   const [activeKey, setActiveKey] = useState<string | null>(null);
-
+  const [isMobile, setIsMobile] = useState<boolean>(false);
   const handleSubmit = () => {
     dispatch(submit());
   };
@@ -40,6 +41,12 @@ const Keyboard = () => {
       }
     }
   };
+
+  useEffect(() => {
+    const detectDevice = () => {
+      setIsMobile(mobileCheck());
+    }
+  }, [])
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
@@ -85,6 +92,10 @@ const Keyboard = () => {
   const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
     setActiveKey(null);
   };
+
+  if(!isMobile){
+    return null;
+  }
 
   return (
     <div className="flex flex-wrap justify-center w-full text-center select-none">
