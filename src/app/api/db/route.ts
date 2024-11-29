@@ -9,7 +9,7 @@ export async function GET() {
 
     const topUsers  = await collection
     .find({})
-    .sort({ topscore: -1 })
+    .sort({ highscore: -1 })
     .limit(5)
     .toArray();
 
@@ -20,7 +20,7 @@ export async function GET() {
     return NextResponse.json({
         users: topUsers.map((user) => ({
           username: user.username,
-          topScore: user.topScore,
+          highscore: user.highscore,
         })),
       });
 

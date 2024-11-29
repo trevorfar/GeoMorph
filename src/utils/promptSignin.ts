@@ -1,7 +1,6 @@
 export async function promptSignin(): Promise<boolean> {
     const username = typeof window !== "undefined" ? localStorage.getItem("username") : "";
-    const topScore = typeof window !== "undefined" ? localStorage.getItem("topScore") : 0;
-    if((username || topScore) === ""){
+    if((!username)){
         return false
     }else {
         return true

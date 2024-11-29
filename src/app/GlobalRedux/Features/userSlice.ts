@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type UserState = {
+export type UserState = {
   username: string;
-  topScore: number;
+  highscore: number;
 };
 
 const initialUserState: UserState = {
   username: typeof window !== "undefined" ? localStorage.getItem("username") || "" : "",  // Default is an empty string
-  topScore: typeof window !== "undefined" ? Number(localStorage.getItem("topScore")) || 0 : 0,  // Default top score
+  highscore: typeof window !== "undefined" ? Number(localStorage.getItem("highscore")) || 0 : 0,  // Default top score
 };
 
 const userSlice = createSlice({
@@ -18,15 +18,15 @@ const userSlice = createSlice({
       state.username = action.payload;
       typeof window !== "undefined" ? localStorage.setItem("username", action.payload) : undefined;
     },
-    setTopScore: (state, action: PayloadAction<number>) => {
-      if (action.payload > state.topScore) {
-        state.topScore = action.payload; 
-        typeof window !== "undefined" ? localStorage.setItem("topscore", action.payload.toString()) : undefined;
-      }
+    setHighscore: (state, action: PayloadAction<number>) => {
+      //if (action.payload > state.highscore) {
+        state.highscore = action.payload; 
+        typeof window !== "undefined" ? localStorage.setItem("highscore", action.payload.toString()) : undefined;
+      //}
     },
   },
 });
 
-export const { setUsername, setTopScore } = userSlice.actions;
+export const { setUsername, setHighscore } = userSlice.actions;
 
 export default userSlice.reducer;

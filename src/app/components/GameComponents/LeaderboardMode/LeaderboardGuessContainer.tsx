@@ -1,7 +1,7 @@
 "use client";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../GlobalRedux/store";
-import { getHint } from "../../../GlobalRedux/Features/countrySlice";
+import { getHint, nextGame } from "../../../GlobalRedux/Features/countrySlice";
 import ConfirmDialog from "../../ConfirmDialog";
 import { useState } from "react";
 

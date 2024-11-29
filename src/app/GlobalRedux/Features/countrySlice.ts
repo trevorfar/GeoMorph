@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import countries from "../../countries"
 import { GameMode } from "../../../../types"
+import { setHighscore, UserState } from "./userSlice"
 
 
 type CountryState = {
@@ -90,14 +91,24 @@ export const nextGame = createAsyncThunk(
   "country/nextGame",
   async (_, { dispatch, getState }) => {
     const newCountry = getRandomCountry()
-
-    const state = getState() as { country: CountryState };
-    const { activeGameMode, gameModeData } = state.country;
-
     const { hint, hintIndices } = getRandomHint(newCountry)
     dispatch(
       setNextGame({ country: newCountry, currentWord: hint, hintIndices })
     )
+  }
+)
+
+export const endGame = createAsyncThunk(
+  "country/endGame",
+  async (_, { dispatch, getState }) => {
+    let state = getState() as { country: CountryState };
+    const userState = getState() as { user: UserState };
+
+    if (state.country.score > userState.user.highscore) {
+      dispatch(setHighscore(state.country.score));
+    } 
+    dispatch(clearGameState());
+    dispatch(nextGame());
   }
 )
 
@@ -164,7 +175,7 @@ const countrySlice = createSlice({
         state.currentWord[state.index] = ""
       }
     },
-
+    
     incrementScore: (state) => {
       if (state.currStreak >= 9 && state.hintRewardedAtStreak < 9) {
         state.hints += 2;
@@ -184,7 +195,7 @@ const countrySlice = createSlice({
     
       state.currStreak++;
     },
-    
+    clearGameState: (state) => initialState,
     decrementScore: (state) => {
       if (state.score >= 1) {
         state.score -= 1
@@ -235,7 +246,8 @@ const countrySlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(submit.fulfilled, (state) => {
+    builder
+    .addCase(submit.fulfilled, (state) => {
       state.gameWon = true
     })
   },
@@ -251,6 +263,7 @@ export const {
   decrementScore,
   getHint,
   setActiveGamemode,
+  clearGameState
   
 } = countrySlice.actions
 

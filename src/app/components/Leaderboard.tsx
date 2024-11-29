@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 interface User {
   username: string;
-  topScore: number;
+  highscore: number;
 }
 
 
@@ -56,7 +56,7 @@ const Leaderboard = () => {
               >
                 <span className="text-lg font-medium">{user.username}</span>
                 <span className="text-lg font-semibold text-blue-500">
-                  {user.topScore}
+                  {user.highscore}
                 </span>
               </div>
             ))
