@@ -7,6 +7,7 @@ function getChangeLog(){
     - Connected a mongo db 
     - Added usernames (beta)
     - Adjusted various colors 
+    - Savable score ( Leaderboard mode only )
 
     Version 1.0.1:
     - Fixed bug where guesses were not being tracked correctly

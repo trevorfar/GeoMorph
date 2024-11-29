@@ -1,9 +1,9 @@
 "use client"
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../GlobalRedux/store";
-import { getHint, nextGame, skipGame } from "../GlobalRedux/Features/countrySlice"
+import { AppDispatch, RootState } from "../../../GlobalRedux/store";
+import { getHint, nextGame, skipGame } from "../../../GlobalRedux/Features/countrySlice"
 
-const GuessContainer = () => {
+const ClassicGuessContainer = () => {
     const { country, guesses } = useSelector((state: RootState) => state.country);
     const dispatch = useDispatch<AppDispatch>();
 
@@ -47,4 +47,4 @@ const GuessContainer = () => {
   )
 }
 
-export default GuessContainer
+export default ClassicGuessContainer

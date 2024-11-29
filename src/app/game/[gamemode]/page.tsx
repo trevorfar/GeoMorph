@@ -1,6 +1,6 @@
 "use client"
-import Classic from "@/app/components/GameComponents/Classic";
-import LeaderboardMode from "@/app/components/GameComponents/LeaderboardMode";
+import Classic from "@/app/components/GameComponents/Classic/Classic";
+import LeaderboardMode from "@/app/components/GameComponents/LeaderboardMode/LeaderboardMode";
 import { useParams } from "next/navigation";
 
 const GameModePage = () => {

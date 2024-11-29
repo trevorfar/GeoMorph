@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { RootState } from '../GlobalRedux/store';
-import CountryShape from './CountryShape';
-import Skeleton from './Skeleton';
+import { RootState } from '../../../GlobalRedux/store';
+import CountryShape from '../../CountryShape';
+import Skeleton from '../../Skeleton';
 import { useSelector } from 'react-redux';
-import { fetchGeoJSONData } from '../../utils/fetchGeo';
+import { fetchGeoJSONData } from '../../../../utils/fetchGeo';
 import clsx from 'clsx';
 
 interface GeoJSONFile {
@@ -13,7 +13,7 @@ interface GeoJSONFile {
   path: string;
 }
 
-const GameContainer = ({ isActive, isDisabled }: { isActive: boolean; isDisabled: boolean }) => {
+const ClassicGameContainer = ({ isActive, isDisabled }: { isActive: boolean; isDisabled: boolean }) => {
   const { country, score, hints, currStreak } = useSelector((state: RootState) => state.country);
   const [geoJsonPath, setGeoJsonPath] = useState<string | null>(null);
 
@@ -80,4 +80,4 @@ const GameContainer = ({ isActive, isDisabled }: { isActive: boolean; isDisabled
   );
 };
 
-export default GameContainer;
+export default ClassicGameContainer;
