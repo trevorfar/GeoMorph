@@ -8,13 +8,20 @@ import Keyboard from "./components/Keyboard"
 import GuessContainer from "./components/GuessContainer"
 import Leaderboard from "./components/Leaderboard"
 import { openChangelog } from "@/utils/changeLog"
+import { promptSignin } from "@/utils/promptSignin"
+import Signup from "./components/Signup"
 
 
 const Page = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [showSignin, setShowSignin] = useState(false);
 
-
+  useEffect(() => {
+    if(promptSignin()){
+      setShowSignin(true);
+    }
+  }, [])
   useEffect(() => {
     dispatch(nextGame())
   }, [dispatch])
@@ -59,6 +66,21 @@ const Page = () => {
               className="mt-4 bg-red-500 text-white py-2 px-4 rounded-xl "
             >
               Close Leaderboard
+            </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showSignin && (
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg w-11/12 md:w-3/4 lg:w-1/2 xl:w-1/3">
+            <Signup />
+            <div className="flex justify-center mt-4">
+            <button
+              onClick={() => setShowSignin(false)}
+              className="mt-4 bg-red-500 text-white py-2 px-4 rounded-xl "
+            >
+              Don&apos;t sign in
             </button>
             </div>
           </div>
