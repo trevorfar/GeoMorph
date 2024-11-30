@@ -21,7 +21,9 @@ type CountryState = {
 }
 
 const getRandomCountry = () => {
-  return countries[Math.floor(Math.random() * countries.length)]
+  let random1 = countries[Math.floor(Math.random() * countries.length)]
+  let random2 = countries[Math.floor(Math.random() * countries.length)]
+  return random2
 }
 
 const getRandomHint = (country: string) => {
