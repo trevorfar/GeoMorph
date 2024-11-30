@@ -4,6 +4,7 @@ import { AppDispatch, RootState } from "../GlobalRedux/store";
 import { type, del, submit } from "../GlobalRedux/Features/countrySlice";
 import { useEffect, useState } from "react";
 import { mobileCheck } from "@/utils/determineConnection";
+import { updateHighscore } from "@/utils/updateDB";
 
 export const keys = {
   topRow: ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
@@ -13,10 +14,12 @@ export const keys = {
 
 const Keyboard = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { index, country } = useSelector((state: RootState) => state.country);
+  const { index, country, score } = useSelector((state: RootState) => state.country);
+  const { username } = useSelector((state: RootState) => state.user);
   const [activeKey, setActiveKey] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const handleSubmit = () => {
+    updateHighscore(username, (score+2));
     dispatch(submit());
   };
 

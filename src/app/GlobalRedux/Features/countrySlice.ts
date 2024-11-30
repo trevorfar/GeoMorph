@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import countries from "../../countries"
 import { GameMode } from "../../../../types"
 import { setHighscore, UserState } from "./userSlice"
+import { updateHighscore } from "@/utils/updateDB"
 
 
 type CountryState = {
@@ -92,6 +93,7 @@ export const nextGame = createAsyncThunk(
   async (_, { dispatch, getState }) => {
     const newCountry = getRandomCountry()
     const { hint, hintIndices } = getRandomHint(newCountry)
+
     dispatch(
       setNextGame({ country: newCountry, currentWord: hint, hintIndices })
     )
@@ -192,7 +194,7 @@ const countrySlice = createSlice({
       } else {
         state.score += 1;
       }
-    
+      
       state.currStreak++;
     },
     clearGameState: (state) => initialState,
@@ -212,7 +214,7 @@ const countrySlice = createSlice({
       if(!state.guesses.includes(guess)){
       state.guesses.push(state.currentWord.join(""))
       }
-      
+
       if (state.score >= 1) {
         state.score -= 1
       } 
