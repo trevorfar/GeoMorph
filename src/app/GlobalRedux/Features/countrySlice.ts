@@ -212,7 +212,15 @@ const countrySlice = createSlice({
       if(!state.guesses.includes(guess)){
       state.guesses.push(state.currentWord.join(""))
       }
+      
+      if (state.score >= 1) {
+        state.score -= 1
+      } 
+      if(state.score === 0){
+        state.hints = 3;
+      }
       state.currStreak = 0;
+      ;
     },
     setNextGame: (
       state,
