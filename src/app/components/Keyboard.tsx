@@ -19,7 +19,6 @@ const Keyboard = () => {
   const [activeKey, setActiveKey] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const handleSubmit = () => {
-    updateHighscore(username, (score+2));
     dispatch(submit());
   };
 

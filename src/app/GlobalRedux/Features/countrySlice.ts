@@ -71,7 +71,10 @@ export const submit = createAsyncThunk(
   "country/submit",
   async (_, { dispatch, getState }) => {
     const state = getState() as { country: CountryState }
+    const userState = getState() as { user: UserState }
+
     const { currentWord, country } = state.country
+    const { username } = userState.user
 
     const filteredCurrentWord = currentWord.filter((letter) => letter !== "")
 
@@ -81,12 +84,18 @@ export const submit = createAsyncThunk(
 
     if (currentWord.join("") === country.toUpperCase()) {
       dispatch(nextGame())
-      dispatch(incrementScore())
+      await dispatch(incrementScore())
+      
+      const updatedState = getState() as { country: CountryState };
+      const { score } = updatedState.country;
+
+      await updateHighscore(username, score)
     } else {
       dispatch(incorrectGuess(currentWord.join("")))
     }
   }
 )
+
 
 export const nextGame = createAsyncThunk(
   "country/nextGame",
