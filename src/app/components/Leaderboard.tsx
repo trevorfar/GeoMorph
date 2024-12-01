@@ -8,8 +8,6 @@ interface User {
 }
 
 
-
-
 const Leaderboard = () => {
 
     const [users, setUsers] = useState<User[]>([]);

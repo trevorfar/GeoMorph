@@ -1,10 +1,8 @@
 "use client"
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../GlobalRedux/store";
-import { type, del, submit } from "../GlobalRedux/Features/countrySlice";
+import { type, submit } from "../GlobalRedux/Features/countrySlice";
 import { useEffect, useState } from "react";
-import { mobileCheck } from "@/utils/determineConnection";
-import { updateHighscore } from "@/utils/updateDB";
 
 export const keys = {
   topRow: ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
@@ -14,10 +12,8 @@ export const keys = {
 
 const Keyboard = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { index, country, score } = useSelector((state: RootState) => state.country);
-  const { username } = useSelector((state: RootState) => state.user);
   const [activeKey, setActiveKey] = useState<string | null>(null);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+
   const handleSubmit = () => {
     dispatch(submit());
   };
@@ -25,30 +21,25 @@ const Keyboard = () => {
   const handleClick = (letter: string) => {
     switch (letter) {
       case keys.bottomRow[8].toUpperCase():
-        if (index !== 0) {
-          dispatch(del());
-        }
+        // if (index !== 0) {
+        //   dispatch(del());
+        // }
         break;
       case "Enter":
         handleSubmit();
         break;
       case "BACKSPACE":
-        if (index !== 0) {
-          dispatch(del());
-        }
+        // if (index !== 0) {
+        //   dispatch(del());
+        // }
         break;
-      default: if (index < Array.from(country).length) {
+      default: 
+      //if (index < Array.from(country).length) {
         
         dispatch(type(letter));
-      }
+      //}
     }
   };
-
-  useEffect(() => {
-    const detectDevice = () => {
-      setIsMobile(mobileCheck());
-    }
-  }, [])
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
@@ -66,14 +57,14 @@ const Keyboard = () => {
             handleSubmit();
             break;
           case "BACKSPACE":
-            if (index !== 0) {
+            // if (index !== 0) {
               handleClick(key);
-            }
+            //}
             break;
           default:
-            if (index < Array.from(country).length) {
+           // if (index < Array.from(country).length) {
               handleClick(key);
-            }
+            //}
             break;
         }
       }
@@ -83,7 +74,7 @@ const Keyboard = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [index, country]);
+  }, []); //TODO: Add changer
 
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>, letter: string) => {
     setActiveKey(letter);
@@ -95,9 +86,7 @@ const Keyboard = () => {
     setActiveKey(null);
   };
 
-  if(!isMobile){
-    return null;
-  }
+ 
 
   return (
     <div className="flex flex-wrap justify-center w-full text-center select-none">
