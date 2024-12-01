@@ -2,45 +2,24 @@
 import { useDispatch, useSelector } from "react-redux";
 import Skeleton from "../Skeleton";
 import { AppDispatch, RootState } from '../../GlobalRedux/store';
-import { setCurrentGuess, setPrevGuess, submit } from "@/app/GlobalRedux/Features/wordSlice"
-import { useEffect, useRef, useState } from "react";
+import { setCurrentGuess, setPrevGuess, submit, type, del } from "@/app/GlobalRedux/Features/wordSlice"
+import { useEffect} from "react";
 
 const GuessContainer = () => {
   const { currentGuess, previousWord } = useSelector((state: RootState) => state.word);
   const dispatch = useDispatch<AppDispatch>();
-  const [currGuess, setCurrGuess] = useState(Array(5).fill(null))
-
   const skeletons = Array(5).fill(null);
-  const currentGuessRef = useRef(currentGuess);
-  const activeIndexRef = useRef(0);
 
-  useEffect(() => {
-      currentGuessRef.current = currentGuess; // Keep the ref updated
-  }, [currentGuess]);
+
+  
 
   const handleKeyPress = (e: KeyboardEvent) => {
-      const updatedGuess = [...currentGuessRef.current];
-      const activeIndex = activeIndexRef.current;
-     
-      
-
       if (e.key.length === 1 && e.key.match(/^[a-zA-Z]$/)) {
-        if (activeIndex === 4 && updatedGuess[activeIndex] !== "") {
-          return; 
-          }
-          updatedGuess[activeIndex] = e.key.toUpperCase();
-          dispatch(setCurrentGuess(updatedGuess));
-          if (activeIndex < 4) {
-              activeIndexRef.current = activeIndex + 1; 
-          }
+        dispatch(type(e.key))
+        console.log(currentGuess)
       } else if (e.key === "Backspace") {
-        if (updatedGuess[activeIndex] === "") {
-          if (activeIndex > 0) {
-              activeIndexRef.current = activeIndex - 1; 
-          }
-      }
-      updatedGuess[activeIndex] = ""; 
-      dispatch(setCurrentGuess(updatedGuess));
+        dispatch(del());
+
       } else if (e.key === "Enter") {
           dispatch(submit());
       }

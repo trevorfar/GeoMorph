@@ -19,7 +19,7 @@ const Skeleton = ({index, letter, onChange, locked}: SkeletonProps) => {
               <input
                 type="text"
                 maxLength={1}
-                value={letter}
+                value={letter || ''}
                 onChange={(e) => onChange && onChange(e.target.value)}
                 readOnly
                 className="w-full h-full text-center bg-transparent outline-none cursor-pointer"

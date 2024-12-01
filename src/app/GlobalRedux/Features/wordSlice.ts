@@ -6,7 +6,7 @@ import countries from "../../countries"
 type WordState = {
   targetWord: string
   previousWord: string
-  currentGuess: string[]
+  currentGuess: string
   
 }
 
@@ -19,7 +19,7 @@ const getRandomCountry = () => {
 const initialState: WordState = {
     targetWord: "",
     previousWord: "",
-    currentGuess: Array(5).fill(""),
+    currentGuess: "",
 }
 
 export const submit = createAsyncThunk(
@@ -27,9 +27,9 @@ export const submit = createAsyncThunk(
   async (_, { dispatch, getState }) => {
     const state = getState() as { word: WordState }
 
-    if (state.word.currentGuess.every((letter) => letter !== "")) {
-      dispatch(setPrevGuess(state.word.currentGuess.join("")));
-  }
+  //   if (state.word.currentGuess.every((letter) => letter !== "")) {
+  //     dispatch(setPrevGuess(state.word.currentGuess.join("")));
+  // }
   }
 )
 
@@ -59,15 +59,17 @@ const wordSlice = createSlice({
   initialState,
   reducers: {
     type: (state, action: PayloadAction<string>) => {
-      
+      if(state.currentGuess.length < 5){
+        state.currentGuess += action.payload;
+      }
     },
     del: (state) => {
-      
-    },
+      state.currentGuess = state.currentGuess.slice(0, -1);
+      },
     setPrevGuess: (state, action: PayloadAction<string>) => {
       state.previousWord = action.payload;
     },
-    setCurrentGuess: (state, action: PayloadAction<string[]>) => {
+    setCurrentGuess: (state, action: PayloadAction<string>) => {
       state.currentGuess = action.payload;
     },
     
