@@ -1,10 +1,10 @@
 import {configureStore} from "@reduxjs/toolkit";
-import countrySlice from "./Features/countrySlice";
+import wordSlice from "./Features/wordSlice";
 import userSlice from "./Features/userSlice";
 
 export const store = configureStore({
   reducer: {
-    country: countrySlice,
+    word: wordSlice,
     user: userSlice
   },
 

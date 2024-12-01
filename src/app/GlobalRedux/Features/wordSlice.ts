@@ -3,7 +3,10 @@ import countries from "../../countries"
 
 
 
-type CountryState = {
+type WordState = {
+  targetWord: string
+  previousWord: string
+  currentGuess: string[]
   
 }
 
@@ -13,40 +16,46 @@ const getRandomCountry = () => {
 
 
 
-const initialState: CountryState = {
-  
+const initialState: WordState = {
+    targetWord: "",
+    previousWord: "",
+    currentGuess: Array(5).fill(""),
 }
 
 export const submit = createAsyncThunk(
-  "country/submit",
+  "word/submit",
   async (_, { dispatch, getState }) => {
-    
+    const state = getState() as { word: WordState }
+
+    if (state.word.currentGuess.every((letter) => letter !== "")) {
+      dispatch(setPrevGuess(state.word.currentGuess.join("")));
+  }
   }
 )
 
 
 export const nextGame = createAsyncThunk(
-  "country/nextGame",
+  "word/nextGame",
   async (_, { dispatch, getState }) => {
   }
 )
 
 export const endGame = createAsyncThunk(
-  "country/endGame",
+  "word/endGame",
   async (_, { dispatch, getState }) => {
   }
 )
 
 
 export const skipGame = createAsyncThunk(
-  "country/skipGame",
+  "word/skipGame",
   async (_, { dispatch }) => {
     
   }
 )
 
-const countrySlice = createSlice({
-  name: "country",
+const wordSlice = createSlice({
+  name: "word",
   initialState,
   reducers: {
     type: (state, action: PayloadAction<string>) => {
@@ -55,6 +64,13 @@ const countrySlice = createSlice({
     del: (state) => {
       
     },
+    setPrevGuess: (state, action: PayloadAction<string>) => {
+      state.previousWord = action.payload;
+    },
+    setCurrentGuess: (state, action: PayloadAction<string[]>) => {
+      state.currentGuess = action.payload;
+    },
+    
     clearGameState: (state) => initialState,
   },
   extraReducers: (builder) => {
@@ -68,8 +84,10 @@ const countrySlice = createSlice({
 export const {
   type,
   del,
-  clearGameState
+  clearGameState,
+  setPrevGuess,
+  setCurrentGuess
   
-} = countrySlice.actions
+} = wordSlice.actions
 
-export default countrySlice.reducer
+export default wordSlice.reducer

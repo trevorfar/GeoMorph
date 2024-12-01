@@ -1,7 +1,7 @@
 "use client"
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../GlobalRedux/store";
-import { type, submit } from "../GlobalRedux/Features/countrySlice";
+import { type, submit } from "../GlobalRedux/Features/wordSlice";
 import { useEffect, useState } from "react";
 
 export const keys = {
