@@ -16,12 +16,10 @@ const GuessContainer = () => {
   const handleKeyPress = (e: KeyboardEvent) => {
       if (e.key.length === 1 && e.key.match(/^[a-zA-Z]$/)) {
         dispatch(type(e.key))
-        console.log(currentGuess)
       } else if (e.key === "Backspace") {
         dispatch(del());
-
       } else if (e.key === "Enter") {
-          dispatch(submit());
+        dispatch(submit());
       }
   };
 

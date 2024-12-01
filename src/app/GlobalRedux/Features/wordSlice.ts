@@ -22,21 +22,47 @@ const initialState: WordState = {
     currentGuess: "",
 }
 
+function containsTwoLetters(inp1: string, inp2: string): boolean {
+  let count = 0;
+  if(inp1.length == 0){
+    return true;
+  }
+  for (const char of inp2){
+    if(inp1.includes(char)){
+      count++
+    }
+    if(count >= 2){
+      return true;
+    }
+  }
+  return false;
+}
+function validateInput(input: string):boolean {
+  if(input.length === 5){    
+    return true
+  }else {
+    return false
+  }
+}
+
 export const submit = createAsyncThunk(
   "word/submit",
   async (_, { dispatch, getState }) => {
     const state = getState() as { word: WordState }
-
-  //   if (state.word.currentGuess.every((letter) => letter !== "")) {
-  //     dispatch(setPrevGuess(state.word.currentGuess.join("")));
-  // }
+    if(validateInput(state.word.currentGuess) && containsTwoLetters(state.word.previousWord, state.word.currentGuess)){
+      dispatch(setPrevGuess(state.word.currentGuess));
+      dispatch(setCurrentGuess(""));
+    }else {
+      return
+    }
   }
 )
 
 
 export const nextGame = createAsyncThunk(
   "word/nextGame",
-  async (_, { dispatch, getState }) => {
+  async (_, { dispatch, getState }) => {  
+      dispatch(setTargetWord(getRandomCountry()));
   }
 )
 
@@ -72,6 +98,9 @@ const wordSlice = createSlice({
     setCurrentGuess: (state, action: PayloadAction<string>) => {
       state.currentGuess = action.payload;
     },
+    setTargetWord: (state, action: PayloadAction<string>) => {
+      state.targetWord = action.payload;
+    },
     
     clearGameState: (state) => initialState,
   },
@@ -88,7 +117,8 @@ export const {
   del,
   clearGameState,
   setPrevGuess,
-  setCurrentGuess
+  setCurrentGuess,
+  setTargetWord
   
 } = wordSlice.actions
 
