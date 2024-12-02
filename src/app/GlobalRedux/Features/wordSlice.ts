@@ -8,6 +8,7 @@ type WordState = {
   previousWord: string
   currentGuess: string[]
   lockedIndecies: number[]
+  selectedIndecies: number[]
   
 }
 
@@ -21,7 +22,8 @@ const initialState: WordState = {
     targetWord: "",
     previousWord: "",
     currentGuess: Array(5).fill(""),
-    lockedIndecies: Array(5).fill(0)
+    lockedIndecies: Array(5).fill(0),
+    selectedIndecies: Array(5).fill(0)
   }
 
 function containsTwoLetters(inp1: string, inp2: string): boolean {
@@ -106,6 +108,14 @@ const wordSlice = createSlice({
     setCurrentGuess: (state, action: PayloadAction<string[]>) => {
       state.currentGuess = action.payload;
     },
+    swapLetters: (state, action: PayloadAction<[number, number]>) => {
+      const [index1, index2] = action.payload;
+      if (index1 >= 0 && index2 >= 0) {
+          const temp = state.currentGuess[index1];
+          state.currentGuess[index1] = state.currentGuess[index2];
+          state.currentGuess[index2] = temp;
+      }
+    },
     setTargetWord: (state, action: PayloadAction<string>) => {
       state.targetWord = action.payload;
     },
@@ -114,8 +124,14 @@ const wordSlice = createSlice({
         state.lockedIndecies[action.payload] = 0;
       }else {
         state.lockedIndecies[action.payload] = 1;
-
       }
+    },
+    selectIndex: (state, action: PayloadAction<number>) => {
+      state.selectedIndecies[action.payload] = 1;
+    },
+    deselectIndex: (state, action: PayloadAction<number>) => {
+      state.selectedIndecies[action.payload] = 0;
+
     },
     clearGameState: (state) => initialState,
   },
@@ -135,7 +151,9 @@ export const {
   setCurrentGuess,
   setTargetWord,
   lockIndex,
-
+  swapLetters,
+  selectIndex,
+  deselectIndex
   
 } = wordSlice.actions
 
