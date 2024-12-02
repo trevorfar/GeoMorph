@@ -124,10 +124,12 @@ const wordSlice = createSlice({
         state.lockedIndecies[action.payload] = 0;
       }else {
         state.lockedIndecies[action.payload] = 1;
+
       }
     },
     selectIndex: (state, action: PayloadAction<number>) => {
       state.selectedIndecies[action.payload] = 1;
+      console.log("hey" + state.selectedIndecies);
     },
     deselectIndex: (state, action: PayloadAction<number>) => {
       state.selectedIndecies[action.payload] = 0;

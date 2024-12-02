@@ -18,6 +18,8 @@ const GuessContainer = () => {
     for(let i = 0; i < 5; i++){
         if(selectedIndecies[i] === 1) array.push(i);
     }
+    console.log(selectedIndecies);
+    console.log(array)
     if(array.length === 2){
         dispatch(swapLetters([array[0], array[1]]))
     }    
@@ -80,7 +82,7 @@ const GuessContainer = () => {
                     ))}
                 </div>
             </div>
-            <StyledButton text={"SWAP"} onClick={handleSwap}/>
+            <StyledButton text={"SWAP"} onClick={(handleSwap)}/>
         </div>
     );
 };
