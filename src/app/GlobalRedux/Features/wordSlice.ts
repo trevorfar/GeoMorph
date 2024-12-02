@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import countries from "../../countries"
+import { checkValidWord, containsTwoLetters, getRandomCountry, validateInput } from "@/utils/functions/functions"
 
 
 
@@ -11,65 +12,34 @@ type WordState = {
   selectedIndecies: number[]
   
 }
-
-const getRandomCountry = () => {  
-  return countries[Math.floor(Math.random() * countries.length)]
-}
-
-
+const numLetters = 5;
 
 const initialState: WordState = {
     targetWord: "",
-    previousWord: Array.from({ length: 5 }, () => ""),
-    currentGuess: Array.from({ length: 5 }, () => ""),
-    lockedIndecies: Array.from({ length: 5 }, () => 0),
-    selectedIndecies: Array.from({ length: 5 }, () => 0),
+    previousWord: Array.from({ length: numLetters }, () => ""),
+    currentGuess: Array.from({ length: numLetters }, () => ""),
+    lockedIndecies: Array.from({ length: numLetters }, () => 0),
+    selectedIndecies: Array.from({ length: numLetters }, () => 0),
   }
 
-function containsTwoLetters(inp1: string[], inp2: string[]): boolean {
-  let count = 0;
-  if (
-    inp1.length !== 5 ||
-    inp2.length !== 5 ||
-    inp1.some((el) => typeof el !== "string") ||
-    inp2.some((el) => typeof el !== "string")
-  ) {
-    return false;
-  }
 
-  if(inp1.every(element => element === "")){
-    return true;
-  }
+  
 
-  for (let i = 0; i < 5; i++){
-    if(inp1[i].toLowerCase() === inp2[i].toLowerCase()){
-      count++;
-    }
-    if(count >= 2){
-      return true;
-    }
-  }
-  return false;
-}
-
-function validateInput(input: string[]):boolean {
-    return input.every((el) => typeof el === "string" && el != "");
-}
 
 export const submit = createAsyncThunk(
   "word/submit",
   async (_, { dispatch, getState }) => {
     try {
       const state = getState() as { word?: WordState };
-
-      if (
-        state.word &&
-        validateInput(state.word.currentGuess) &&
-        containsTwoLetters(state.word.previousWord, state.word.currentGuess)
-      ) {
-        dispatch(setPrevGuess([...state.word.currentGuess]));
-        dispatch(setCurrentGuess(Array.from({ length: 5 }, () => "")));
-      }
+        if (
+          state.word &&
+          validateInput(state.word.currentGuess) &&
+          containsTwoLetters(state.word.previousWord, state.word.currentGuess, numLetters) &&
+          checkValidWord(state.word.currentGuess.join("")) 
+        ) {
+          dispatch(setPrevGuess([...state.word.currentGuess]));
+          dispatch(setCurrentGuess(Array.from({ length: numLetters }, () => "")));
+        }
     } catch (error) {
       console.error("Error in submit thunk:", error);
     }
@@ -105,7 +75,7 @@ const wordSlice = createSlice({
   reducers: {
     type: (state, action) => {
     const { letter, index } = action.payload
-    if (state.lockedIndecies[index] === 0 && index < 5) {
+    if (state.lockedIndecies[index] === 0 && index < numLetters) {
       state.currentGuess[index] = letter;
     }   
    },

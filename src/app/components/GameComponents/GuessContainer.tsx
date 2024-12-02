@@ -10,12 +10,13 @@ const GuessContainer = () => {
   const { currentGuess, previousWord, lockedIndecies, selectedIndecies } = useSelector((state: RootState) => state.word);
   const [currPosition, setCurrPosition] = useState(0)
   const dispatch = useDispatch<AppDispatch>();
-  const skeletons = Array(5).fill(null);
+  const numLetters = 5;
 
+  const skeletons = Array(numLetters).fill(null);
     const handleSwap = () => {
     let array = []
     
-    for(let i = 0; i < 5; i++){
+    for(let i = 0; i < numLetters; i++){
         if(selectedIndecies[i] === 1) array.push(i);
     }
     if (array.length !== 2) {
@@ -38,11 +39,11 @@ const GuessContainer = () => {
                 return; 
             }
 
-            while (position < 5 && lockedIndecies[position] === 1 || currentGuess[position] != "") {
+            while (position < numLetters && lockedIndecies[position] === 1 || currentGuess[position] != "") {
                 position++;
             }
 
-            if (position < 5) {
+            if (position < numLetters) {
                 dispatch(type({ letter: e.key, index: position }));
                 setCurrPosition(position + 1);
             }
@@ -55,7 +56,7 @@ const GuessContainer = () => {
             if (currentGuess.every((guess) => guess === "")) {
                 return;
             }
-            let position = currPosition > 0 ? currPosition - 1 : 4;
+            let position = currPosition > 0 ? currPosition - 1 : numLetters - 1;
 
             while (position >= 0 && lockedIndecies[position] === 1) {
                 position--;

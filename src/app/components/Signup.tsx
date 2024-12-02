@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setUsername, setHighscore } from "../GlobalRedux/Features/userSlice";
+import { setUsername } from "../GlobalRedux/Features/userSlice";
 import { RootState } from "../GlobalRedux/store";
 import { updateHighscore } from "@/utils/updateDB";
 
@@ -9,7 +9,7 @@ const UserProfile = ({setShowSignin,
   setShowSignin: (visible: boolean) => void;
 }) => {
   const dispatch = useDispatch();
-  const { username, highscore } = useSelector((state: RootState) => state.user);
+  const { username } = useSelector((state: RootState) => state.user);
 
   const [newUsername, setNewUsername] = useState("");
 
