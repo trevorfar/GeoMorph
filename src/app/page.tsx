@@ -22,7 +22,7 @@ const Page = () => {
                 Players get 1 <b>swap</b> to rearrange any letter to any spot of their choosing! <b>NOTE</b>: You do not need to rearrange to a valid word</p>
                 <p className="justify-center items-center flex">Ready? </p>
                 <div className="justify-center items-center flex">               
-                     <StyledButton text={"PLAY"} onClick={()=> router.push('/Game')}/>
+                     <StyledButton text={"PLAY"} onClick={()=> router.push('/game')}/>
                 </div>
             </div>
         </div>

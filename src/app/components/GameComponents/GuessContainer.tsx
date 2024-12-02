@@ -2,10 +2,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import Skeleton from "../Skeleton";
 import { AppDispatch, RootState } from '../../GlobalRedux/store';
-import { setCurrentGuess, setPrevGuess, submit, type, del, swapLetters, selectIndex } from "@/app/GlobalRedux/Features/wordSlice"
+import { submit, type, del, swapLetters } from "@/app/GlobalRedux/Features/wordSlice"
 import { useEffect, useState} from "react";
 import StyledButton from "@/utils/StyledComponents/Button";
-import { arrayBuffer } from "stream/consumers";
 
 const GuessContainer = () => {
   const { currentGuess, previousWord, lockedIndecies, selectedIndecies } = useSelector((state: RootState) => state.word);
@@ -15,11 +14,13 @@ const GuessContainer = () => {
 
     const handleSwap = () => {
     let array = []
+    
     for(let i = 0; i < 5; i++){
         if(selectedIndecies[i] === 1) array.push(i);
     }
-    console.log(selectedIndecies);
-    console.log(array)
+    if (array.length !== 2) {
+        return; 
+    }
     if(array.length === 2){
         dispatch(swapLetters([array[0], array[1]]))
     }    
@@ -29,6 +30,13 @@ const GuessContainer = () => {
     const handleKeyPress = (e: KeyboardEvent) => {
         if (e.key.length === 1 && e.key.match(/^[a-zA-Z]$/)) {
             let position = currPosition;
+            if (currentGuess.every((guess) => guess !== "")) {
+                return; 
+            }
+
+            if (currentGuess.every((guess, index) => guess !== "" || lockedIndecies[index] === 1)) {
+                return; 
+            }
 
             while (position < 5 && lockedIndecies[position] === 1 || currentGuess[position] != "") {
                 position++;
@@ -41,6 +49,12 @@ const GuessContainer = () => {
         }
         // Backspace
         else if (e.key === "Backspace") {
+            if (currentGuess.every((_, index) => lockedIndecies[index] === 1)) {
+                return; 
+            }
+            if (currentGuess.every((guess) => guess === "")) {
+                return;
+            }
             let position = currPosition > 0 ? currPosition - 1 : 4;
 
             while (position >= 0 && lockedIndecies[position] === 1) {
