@@ -2,7 +2,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import Skeleton from "../Skeleton";
 import { AppDispatch, RootState } from '../../GlobalRedux/store';
-import { submit, type, del, swapLetters } from "@/app/GlobalRedux/Features/wordSlice"
+import { submit, type, del, swapLetters, resetSelection } from "@/app/GlobalRedux/Features/wordSlice"
 import { useEffect, useState} from "react";
 import StyledButton from "@/utils/StyledComponents/Button";
 
@@ -24,6 +24,7 @@ const GuessContainer = () => {
     }
     if(array.length === 2){
         dispatch(swapLetters([array[0], array[1]]))
+        dispatch(resetSelection());
     }    
   }
 

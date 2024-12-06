@@ -2,7 +2,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../GlobalRedux/store";
 import { useEffect, useState } from "react";
-import { deselectIndex, lockIndex, selectIndex, swapLetters } from "../GlobalRedux/Features/wordSlice";
+import { deselectIndex, lockIndex, selectIndex, swapLetters, handleNumSelects } from "../GlobalRedux/Features/wordSlice";
 
 interface SkeletonProps {
   index: number;
@@ -16,15 +16,23 @@ const Skeleton = ({index, letter, onChange, locked, isDisplay}: SkeletonProps) =
   const [isSelected, setIsSelected] = useState(false);
   const [isRightClicked, setIsRightClicked] = useState(false);
   const dispatch = useDispatch();
+  const { numSelects, resetFlag } = useSelector((state: RootState) => state.word);
 
+  useEffect(() => {
+    setIsSelected(false);
+  }, [resetFlag]);
+  
   function handleSelect() {
     if (!locked) {
       if(!isSelected){
+        if(numSelects >= 2) return;
         dispatch(selectIndex(index));
-        setIsSelected(!isSelected)
+        dispatch(handleNumSelects(1));
+        setIsSelected(!isSelected);
         return
       }
-      dispatch(deselectIndex(index))
+      dispatch(deselectIndex(index));
+      dispatch(handleNumSelects(-1));
       setIsSelected(!isSelected);
     }
   }

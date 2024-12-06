@@ -11,17 +11,21 @@ type WordState = {
   lockedIndecies: number[]
   selectedIndecies: number[]
   numGuesses: number
+  numSelects: number
+  resetFlag: boolean
   
 }
 const numLetters = 5;
 
 const initialState: WordState = {
     targetWord: "",
+    numSelects: 0,
     numGuesses: 0,
     previousWord: Array.from({ length: numLetters }, () => ""),
     currentGuess: Array.from({ length: numLetters }, () => ""),
     lockedIndecies: Array.from({ length: numLetters }, () => 0),
     selectedIndecies: Array.from({ length: numLetters }, () => 0),
+    resetFlag: false,
   }
 
 
@@ -93,17 +97,26 @@ const wordSlice = createSlice({
     setCurrentGuess: (state, action: PayloadAction<string[]>) => {
       state.currentGuess = action.payload;
     },
+    handleNumSelects: (state, action: PayloadAction<number>) => {
+      const delim: number = action.payload;
+      state.numSelects +=  delim;
+    },
+    resetSelection: (state) => {
+      state.selectedIndecies = Array(5).fill(0);
+      state.numSelects = 0;
+      state.resetFlag = !state.resetFlag; 
+    },
     swapLetters: (state, action: PayloadAction<[number, number]>) => {
       const [index1, index2] = action.payload;
       if (
         index1 >= 0 &&
-        index1 < state.currentGuess.length &&
+        index1 < state.previousWord.length &&
         index2 >= 0 &&
-        index2 < state.currentGuess.length
+        index2 < state.previousWord.length
       ) {
-        [state.currentGuess[index1], state.currentGuess[index2]] = [
-          state.currentGuess[index2],
-          state.currentGuess[index1],
+        [state.previousWord[index1], state.previousWord[index2]] = [
+          state.previousWord[index2],
+          state.previousWord[index1],
         ];
       }
     },
@@ -150,6 +163,8 @@ export const {
   swapLetters,
   selectIndex,
   deselectIndex,
+  handleNumSelects,
+  resetSelection
   
   
 } = wordSlice.actions
