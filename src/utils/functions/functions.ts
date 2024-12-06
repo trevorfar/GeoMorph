@@ -1,8 +1,7 @@
-import countries from "@/app/countries";
 import words from "@/app/words";
 
-export function getRandomCountry() {  
-    return countries[Math.floor(Math.random() * countries.length)]
+export function getRandomWord() {  
+    return words[Math.floor(Math.random() * words.length)]
   }
 
 export function containsTwoLetters(inp1: string[], inp2: string[], numLetters: number): boolean {

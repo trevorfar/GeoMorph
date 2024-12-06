@@ -45,11 +45,11 @@ const Skeleton = ({index, letter, onChange, locked, isDisplay}: SkeletonProps) =
       className={`border-2 w-3 border-black h-3 lg:w-12 lg:h-12 md:w-8 flex items-center justify-center font-semibold p-2
       transition duration-200 ease-in-out transform cursor-pointer
       ${
-          isRightClicked && !isDisplay
+          isRightClicked && isDisplay
             ? "border-red-500 bg-red-100"
             : isSelected && !isDisplay
             ? "scale-110 border-blue-500 bg-blue-100"
-            : isDisplay ? "hover:scale-95 " : "hover:scale-110 hover:border-blue-500"
+            : isDisplay ? "hover:scale-110 " : "hover:scale-110 hover:border-blue-500"
         }`}
         >
               {

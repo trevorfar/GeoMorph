@@ -83,7 +83,7 @@ const GuessContainer = () => {
                 <div>Previous Guess</div>
                 <div className="flex flex-row gap-2">
                     {skeletons.map((_, idx) => (
-                        <Skeleton key={idx} index={idx} letter={previousWord[idx]} isDisplay={true}/>
+                        <Skeleton key={idx} index={idx} letter={previousWord[idx]} isDisplay={false}/>
                     ))}
                 </div>
             </div>
@@ -93,7 +93,7 @@ const GuessContainer = () => {
             <div className="border-2 border-black h-2/3 w-full justify-center items-center flex">
                 <div className="w-11/12 flex flex-row gap-12 items-center justify-center">
                     {skeletons.map((_, idx) => (
-                        <Skeleton key={idx} index={idx} letter={currentGuess[idx]} />
+                        <Skeleton key={idx} index={idx} letter={currentGuess[idx]} isDisplay={true} />
                     ))}
                 </div>
             </div>

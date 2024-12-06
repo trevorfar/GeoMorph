@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import countries from "../../countries"
-import { checkValidWord, containsTwoLetters, getRandomCountry, validateInput } from "@/utils/functions/functions"
+import { checkValidWord, containsTwoLetters, getRandomWord, validateInput } from "@/utils/functions/functions"
 
 
 
@@ -10,12 +10,14 @@ type WordState = {
   currentGuess: string[]
   lockedIndecies: number[]
   selectedIndecies: number[]
+  numGuesses: number
   
 }
 const numLetters = 5;
 
 const initialState: WordState = {
     targetWord: "",
+    numGuesses: 0,
     previousWord: Array.from({ length: numLetters }, () => ""),
     currentGuess: Array.from({ length: numLetters }, () => ""),
     lockedIndecies: Array.from({ length: numLetters }, () => 0),
@@ -48,10 +50,10 @@ export const submit = createAsyncThunk(
 
 
 
-export const nextGame = createAsyncThunk(
-  "word/nextGame",
+export const startGame = createAsyncThunk<void, void>(
+  "word/startGame",
   async (_, { dispatch, getState }) => {  
-      dispatch(setTargetWord(getRandomCountry()));
+      dispatch(setTargetWord(getRandomWord()));
   }
 )
 
@@ -147,7 +149,8 @@ export const {
   lockIndex,
   swapLetters,
   selectIndex,
-  deselectIndex
+  deselectIndex,
+  
   
 } = wordSlice.actions
 
