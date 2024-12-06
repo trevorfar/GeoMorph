@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import countries from "../../countries"
 import { checkValidWord, containsTwoLetters, getRandomWord, validateInput } from "@/utils/functions/functions"
+import words from "@/app/words"
 
 
 
@@ -13,12 +14,14 @@ type WordState = {
   numGuesses: number
   numSelects: number
   resetFlag: boolean
+  listOfWords: string[]
   
 }
 const numLetters = 5;
 
 const initialState: WordState = {
     targetWord: "",
+    listOfWords: words,
     numSelects: 0,
     numGuesses: 0,
     previousWord: Array.from({ length: numLetters }, () => ""),
@@ -35,20 +38,9 @@ const initialState: WordState = {
 export const submit = createAsyncThunk(
   "word/submit",
   async (_, { dispatch, getState }) => {
-    try {
-      const state = getState() as { word?: WordState };
-        if (
-          state.word &&
-          validateInput(state.word.currentGuess) &&
-          containsTwoLetters(state.word.previousWord, state.word.currentGuess, numLetters) &&
-          checkValidWord(state.word.currentGuess.join("")) 
-        ) {
+      const state = getState() as { word: WordState };
           dispatch(setPrevGuess([...state.word.currentGuess]));
           dispatch(setCurrentGuess(Array.from({ length: numLetters }, () => "")));
-        }
-    } catch (error) {
-      console.error("Error in submit thunk:", error);
-    }
   }
 );
 
@@ -57,7 +49,13 @@ export const submit = createAsyncThunk(
 export const startGame = createAsyncThunk<void, void>(
   "word/startGame",
   async (_, { dispatch, getState }) => {  
-      dispatch(setTargetWord(getRandomWord()));
+    const state = getState() as { word: WordState }
+    const { word: targetWord, updatedWords: afterTargetWordRemoval } = getRandomWord(state.word.listOfWords);
+    const { word: previousWord, updatedWords: finalWordList } = getRandomWord(afterTargetWordRemoval);
+
+    dispatch(setTargetWord(targetWord));
+    dispatch(setPrevGuess(Array.from(previousWord)));
+    dispatch(setListOfWords(finalWordList));
   }
 )
 
@@ -100,6 +98,9 @@ const wordSlice = createSlice({
     handleNumSelects: (state, action: PayloadAction<number>) => {
       const delim: number = action.payload;
       state.numSelects +=  delim;
+    },
+     setListOfWords: (state, action) => {
+      state.listOfWords = action.payload;
     },
     resetSelection: (state) => {
       state.selectedIndecies = Array(5).fill(0);
@@ -164,7 +165,8 @@ export const {
   selectIndex,
   deselectIndex,
   handleNumSelects,
-  resetSelection
+  resetSelection,
+  setListOfWords
   
   
 } = wordSlice.actions

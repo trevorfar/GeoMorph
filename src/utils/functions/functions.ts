@@ -1,7 +1,27 @@
 import words from "@/app/words";
 
-export function getRandomWord() {  
-    return words[Math.floor(Math.random() * words.length)]
+export function validateSubmitInput( currentGuess: string[], previousGuess: string[], numLetters: number): boolean{
+  if (
+    validateInput(currentGuess) &&
+    containsTwoLetters(previousGuess, currentGuess, numLetters) &&
+    checkValidWord(currentGuess.join("")) 
+  ) {
+    return true
+  }
+  return false
+}
+
+export function getRandomWord(words: string[]): { word: string, updatedWords: string[] } {
+  if (words.length === 0) {
+    throw new Error("No words left to select.");
+  }
+    const randomIndex = Math.floor(Math.random() * words.length);
+    const word = words[randomIndex];
+
+    return {
+      word,
+      updatedWords: words.filter((_, index) => index !== randomIndex),
+    };
   }
 
 export function containsTwoLetters(inp1: string[], inp2: string[], numLetters: number): boolean {

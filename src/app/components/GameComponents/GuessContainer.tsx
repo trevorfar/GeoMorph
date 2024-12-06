@@ -5,6 +5,7 @@ import { AppDispatch, RootState } from '../../GlobalRedux/store';
 import { submit, type, del, swapLetters, resetSelection } from "@/app/GlobalRedux/Features/wordSlice"
 import { useEffect, useState} from "react";
 import StyledButton from "@/utils/StyledComponents/Button";
+import { validateSubmitInput } from "@/utils/functions/functions";
 
 const GuessContainer = () => {
   const { currentGuess, previousWord, lockedIndecies, selectedIndecies } = useSelector((state: RootState) => state.word);
@@ -57,8 +58,11 @@ const GuessContainer = () => {
             if (currentGuess.every((guess) => guess === "")) {
                 return;
             }
-            let position = currPosition > 0 ? currPosition - 1 : numLetters - 1;
-
+           
+            
+            let position = currPosition > 0 ? currPosition - 1 : currPosition;
+            if(currPosition === 0) return;
+            
             while (position >= 0 && lockedIndecies[position] === 1) {
                 position--;
             }
@@ -69,14 +73,18 @@ const GuessContainer = () => {
             }
         }
         else if (e.key === "Enter") {
-            dispatch(submit());
-            setCurrPosition(0); 
+            if(validateSubmitInput(currentGuess, previousWord, numLetters)){
+                dispatch(submit());
+                setCurrPosition(0);
+            }else {
+                return
+            }
         }
     };
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-}, [currPosition, currentGuess, dispatch, lockedIndecies]);
+}, [currPosition, currentGuess, dispatch, lockedIndecies, previousWord]);
 
     return (
         <div className="flex flex-col h-full items-center justify-center text-center">
