@@ -50,6 +50,10 @@ export function containsTwoLetters(inp1: string[], inp2: string[], numLetters: n
     return false;
   }
 
+  export const verifyWin = (): boolean => {
+
+    return true
+  }
   
   export function checkValidWord(input: string): boolean{
     if (!input.trim()) {

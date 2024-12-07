@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import countries from "../../countries"
-import { checkValidWord, containsTwoLetters, getRandomWord, validateInput } from "@/utils/functions/functions"
+import { checkValidWord, containsTwoLetters, getRandomWord, validateInput, verifyWin } from "@/utils/functions/functions"
 import words from "@/app/words"
 
 
@@ -15,6 +15,7 @@ type WordState = {
   numSelects: number
   resetFlag: boolean
   listOfWords: string[]
+  score: number
   
 }
 const numLetters = 5;
@@ -29,6 +30,7 @@ const initialState: WordState = {
     lockedIndecies: Array.from({ length: numLetters }, () => 0),
     selectedIndecies: Array.from({ length: numLetters }, () => 0),
     resetFlag: false,
+    score: 0,
   }
 
 
@@ -39,9 +41,15 @@ export const submit = createAsyncThunk(
   "word/submit",
   async (_, { dispatch, getState }) => {
       const state = getState() as { word: WordState };
+        if(verifyWin()){
+          dispatch(setCurrentGuess(Array.from({ length: numLetters }, () => "")));
+          dispatch(incrementScore());
+          dispatch(startGame());
+        }else {
           dispatch(setPrevGuess([...state.word.currentGuess]));
           dispatch(setCurrentGuess(Array.from({ length: numLetters }, () => "")));
-  }
+        }
+        }
 );
 
 
@@ -143,6 +151,9 @@ const wordSlice = createSlice({
         state.selectedIndecies[action.payload] = 0;
       }
     },
+    incrementScore: (state) => {
+      state.score += 1;
+    },
     clearGameState: (state) => initialState,
   },
   extraReducers: (builder) => {
@@ -166,7 +177,8 @@ export const {
   deselectIndex,
   handleNumSelects,
   resetSelection,
-  setListOfWords
+  setListOfWords,
+  incrementScore
   
   
 } = wordSlice.actions
