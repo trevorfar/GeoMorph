@@ -1,16 +1,24 @@
 import words from "@/app/words";
 
-export function validateSubmitInput( currentGuess: string[], previousGuess: string[], numLetters: number): boolean{
-  if (
-    validateInput(currentGuess) &&
-    containsTwoLetters(previousGuess, currentGuess, numLetters) &&
-    checkValidWord(currentGuess.join("")) 
-  ) {
+export function validateSubmitInput(
+  currentGuess: string[], 
+  previousGuess: string[], 
+  numLetters: number, 
+  winningFlag?: boolean
+): boolean {
+  if (!validateInput(currentGuess) || !checkValidWord(currentGuess.join(""))) {
+    return false;
+  }
+  const requiredMatches = winningFlag ? 3 : 2;
+  return containsXLetters(previousGuess, currentGuess, numLetters, requiredMatches);
+}
+
+export function compArray(inp1: string[], inp2: string[]): boolean {
+  if(inp1.join("" )=== inp2.join("")){
     return true
   }
   return false
 }
-
 export function getRandomWord(words: string[]): { word: string, updatedWords: string[] } {
   if (words.length === 0) {
     throw new Error("No words left to select.");
@@ -24,7 +32,7 @@ export function getRandomWord(words: string[]): { word: string, updatedWords: st
     };
   }
 
-export function containsTwoLetters(inp1: string[], inp2: string[], numLetters: number): boolean {
+export function containsXLetters(inp1: string[], inp2: string[], numLetters: number, x: number): boolean {
     let count = 0;
     if (
       inp1.length !== numLetters ||
@@ -32,6 +40,7 @@ export function containsTwoLetters(inp1: string[], inp2: string[], numLetters: n
       inp1.some((el) => typeof el !== "string") ||
       inp2.some((el) => typeof el !== "string")
     ) {
+      console.log("failure")
       return false;
     }
   
@@ -43,16 +52,20 @@ export function containsTwoLetters(inp1: string[], inp2: string[], numLetters: n
       if(inp1[i].toLowerCase() === inp2[i].toLowerCase()){
         count++;
       }
-      if(count >= 2){
+      if(count >= x){
         return true;
       }
     }
+    console.log("fail")
     return false;
   }
 
-  export const verifyWin = (): boolean => {
-
-    return true
+  export const verifyWin = (currentGuess: string[], targetGuess: string[]): boolean => {
+    if(currentGuess === targetGuess){
+      return true
+    }else {
+      return false;
+    }
   }
   
   export function checkValidWord(input: string): boolean{

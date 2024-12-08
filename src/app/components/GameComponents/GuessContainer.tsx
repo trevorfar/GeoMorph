@@ -2,13 +2,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import Skeleton from "../Skeleton";
 import { AppDispatch, RootState } from '../../GlobalRedux/store';
-import { submit, type, del, swapLetters, resetSelection } from "@/app/GlobalRedux/Features/wordSlice"
+import { submit, type, del, swapLetters, resetSelection, wonGame, setPrevGuess } from "@/app/GlobalRedux/Features/wordSlice"
 import { useEffect, useState} from "react";
 import StyledButton from "@/utils/StyledComponents/Button";
-import { validateSubmitInput } from "@/utils/functions/functions";
+import { compArray, validateSubmitInput } from "@/utils/functions/functions";
 
 const GuessContainer = () => {
-  const { currentGuess, previousWord, lockedIndecies, selectedIndecies } = useSelector((state: RootState) => state.word);
+  const { currentGuess, previousWord, lockedIndecies, selectedIndecies, targetWord } = useSelector((state: RootState) => state.word);
   const [currPosition, setCurrPosition] = useState(0)
   const dispatch = useDispatch<AppDispatch>();
   const numLetters = 5;
@@ -72,24 +72,39 @@ const GuessContainer = () => {
                 setCurrPosition(position); 
             }
         }
+
         else if (e.key === "Enter") {
-            if(validateSubmitInput(currentGuess, previousWord, numLetters)){
+            if(compArray(currentGuess, previousWord)){
+                return // error state, same word
+            }
+            if (currentGuess.join("") == targetWord){
+                if(validateSubmitInput(currentGuess, previousWord, numLetters, true)){
+                    dispatch(wonGame())
+                    setCurrPosition(0);
+                }
+                else {
+                    return // Add error state here
+                }
+            }
+            else if (validateSubmitInput(currentGuess, previousWord, numLetters)){
                 dispatch(submit());
                 setCurrPosition(0);
-            }else {
-                return
+            }
+            else {
+                return // add error state here
             }
         }
     };
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-}, [currPosition, currentGuess, dispatch, lockedIndecies, previousWord]);
+}, [currPosition, currentGuess, dispatch, lockedIndecies, previousWord, targetWord]);
 
     return (
         <div className="flex flex-col h-full items-center justify-center text-center">
             <div className="border-2 border-black h-1/3 w-2/3 flex flex-col items-center justify-center gap-2">
                 <div>Previous Guess</div>
+                <input onInput={(e) => dispatch(setPrevGuess(Array.from(e.currentTarget.value)))}></input>
                 <div className="flex flex-row gap-2">
                     {skeletons.map((_, idx) => (
                         <Skeleton key={idx} index={idx} letter={previousWord[idx]} isDisplay={false}/>

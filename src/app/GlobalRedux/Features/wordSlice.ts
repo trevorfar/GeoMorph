@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import countries from "../../countries"
-import { checkValidWord, containsTwoLetters, getRandomWord, validateInput, verifyWin } from "@/utils/functions/functions"
+import { checkValidWord, containsXLetters, getRandomWord, validateInput, verifyWin } from "@/utils/functions/functions"
 import words from "@/app/words"
 
 
@@ -33,6 +33,16 @@ const initialState: WordState = {
     score: 0,
   }
 
+export const wonGame = createAsyncThunk(
+  "word/wonGame",
+  async (_, { dispatch, getState }) => {
+      const state = getState() as { word: WordState };
+          dispatch(setCurrentGuess(Array.from({ length: numLetters }, () => "")));
+          dispatch(incrementScore());
+          dispatch(startGame());
+    
+        }
+);
 
   
 
@@ -41,11 +51,10 @@ export const submit = createAsyncThunk(
   "word/submit",
   async (_, { dispatch, getState }) => {
       const state = getState() as { word: WordState };
-        if(verifyWin()){
-          dispatch(setCurrentGuess(Array.from({ length: numLetters }, () => "")));
-          dispatch(incrementScore());
-          dispatch(startGame());
-        }else {
+      if(state.word.currentGuess === Array.from(state.word.targetWord)){
+        dispatch(wonGame());
+      }
+        else {
           dispatch(setPrevGuess([...state.word.currentGuess]));
           dispatch(setCurrentGuess(Array.from({ length: numLetters }, () => "")));
         }
