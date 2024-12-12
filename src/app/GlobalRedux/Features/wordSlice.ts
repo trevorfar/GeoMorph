@@ -16,6 +16,7 @@ type WordState = {
   resetFlag: boolean
   listOfWords: string[]
   score: number
+  numSwaps: number
   
 }
 const numLetters = 5;
@@ -31,6 +32,7 @@ const initialState: WordState = {
     selectedIndecies: Array.from({ length: numLetters }, () => 0),
     resetFlag: false,
     score: 0,
+    numSwaps: 1,
   }
 
 export const wonGame = createAsyncThunk(
@@ -73,6 +75,7 @@ export const startGame = createAsyncThunk<void, void>(
     dispatch(setTargetWord(targetWord));
     dispatch(setPrevGuess(Array.from(previousWord)));
     dispatch(setListOfWords(finalWordList));
+    dispatch(resetNumSwaps());
   }
 )
 
@@ -125,6 +128,8 @@ const wordSlice = createSlice({
       state.resetFlag = !state.resetFlag; 
     },
     swapLetters: (state, action: PayloadAction<[number, number]>) => {
+      if(state.numSwaps == 0) return;
+
       const [index1, index2] = action.payload;
       if (
         index1 >= 0 &&
@@ -136,9 +141,14 @@ const wordSlice = createSlice({
           state.previousWord[index2],
           state.previousWord[index1],
         ];
+        state.numSwaps = 0;;
       }
     },
     
+    resetNumSwaps: (state) => {
+      state.numSwaps += 1;
+    },
+
     setTargetWord: (state, action: PayloadAction<string>) => {
       state.targetWord = action.payload;
     },
@@ -187,7 +197,8 @@ export const {
   handleNumSelects,
   resetSelection,
   setListOfWords,
-  incrementScore
+  incrementScore,
+  resetNumSwaps
   
   
 } = wordSlice.actions

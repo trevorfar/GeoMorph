@@ -6,11 +6,16 @@ import { submit, type, del, swapLetters, resetSelection, wonGame, setPrevGuess }
 import { useEffect, useState} from "react";
 import StyledButton from "@/utils/StyledComponents/Button";
 import { compArray, validateSubmitInput } from "@/utils/functions/functions";
+import ConfirmDialog from "../RulesDialog";
 
 const GuessContainer = () => {
   const { currentGuess, previousWord, lockedIndecies, selectedIndecies, targetWord } = useSelector((state: RootState) => state.word);
+  const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false); 
+
   const [currPosition, setCurrPosition] = useState(0)
+  
   const dispatch = useDispatch<AppDispatch>();
+
   const numLetters = 5;
 
   const skeletons = Array(numLetters).fill(null);
@@ -102,7 +107,7 @@ const GuessContainer = () => {
 
     return (
         <div className="flex flex-col h-full items-center justify-center text-center">
-            <div className="border-2 border-black h-1/3 w-2/3 flex flex-col items-center justify-center gap-2">
+            <div className=" h-1/3 w-2/3 flex flex-col items-center justify-center gap-2">
                 <div>Previous Guess</div>
                 <input onInput={(e) => dispatch(setPrevGuess(Array.from(e.currentTarget.value)))}></input>
                 <div className="flex flex-row gap-2">
@@ -121,7 +126,13 @@ const GuessContainer = () => {
                     ))}
                 </div>
             </div>
-            <StyledButton text={"SWAP"} onClick={(handleSwap)}/>
+            <div className="flex flex-row gap-4 pt-4">
+                <StyledButton text={"SWAP"} onClick={(handleSwap)}/>
+                <StyledButton text={"RULES"} onClick={() => setIsConfirmDialogVisible(true)} />
+            </div>
+            {isConfirmDialogVisible && (
+        <ConfirmDialog setIsDialogVisible={setIsConfirmDialogVisible}/>
+      )}
         </div>
     );
 };
