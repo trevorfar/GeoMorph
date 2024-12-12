@@ -1,5 +1,5 @@
-declare global {
-    var _mongoClientPromise: Promise<any> | undefined;
-  }
+// declare global {
+//     var _mongoClientPromise: Promise<any> | undefined;
+//   }
   
-  export {};
+//   export {};
