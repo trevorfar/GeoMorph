@@ -25,7 +25,7 @@ const router = useRouter()
                 <p className="justify-center items-center flex"><b>Ready?</b> </p>
                 <div className="justify-center items-center flex">               
                     
-                    { displayButton === true ? <StyledButton text={"PLAY"} onClick={()=> router.push('/game')}/> : <></>}
+                    { displayButton === true ? <StyledButton text={"PLAY"} onClick={()=> router.push('/Game')}/> : <></>}
                 </div>
             </div>
         </div>
